@@ -1,0 +1,82 @@
+# Apache .htaccess for cPanel - Static File Serving and API Proxy
+# IMPORTANT: Update the paths below to match your cPanel directory structure
+
+# Enable rewrite engine
+RewriteEngine On
+
+# --- Static Files ---
+# Serve static files directly from the uploads directory
+# IMPORTANT: Replace /home/username/backend/app/uploads/ with your actual path
+# Example: /home/taxtower/lebrq_api/app/uploads/
+# To find your path: SSH into cPanel and run: pwd (in your backend directory)
+
+# Check if file exists in uploads directory, if not, try FastAPI
+RewriteCond %{REQUEST_URI} ^/static/(.*)$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^static/(.*)$ /home/taxtower/lebrq_api/app/uploads/$1 [L]
+
+# If static file doesn't exist, return 404 (don't proxy to FastAPI)
+RewriteCond %{REQUEST_URI} ^/static/(.*)$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^static/(.*)$ - [R=404,L]
+
+# Expo web export static assets (must NOT be rewritten to SPA index)
+# Ensure these paths are served as files
+RewriteCond %{REQUEST_URI} ^/_expo/(.*)$ [OR]
+RewriteCond %{REQUEST_URI} ^/assets/(.*)$
+RewriteRule .* - [L]
+
+# --- API Proxy ---
+# Proxy all /api requests to the FastAPI backend running on port 8000
+# IMPORTANT: Ensure your FastAPI app is running on port 8000
+# If using a different port, change 8000 below
+
+# WebSocket upgrade proxy (wss -> wss to external backend)
+RewriteCond %{REQUEST_URI} ^/api/(.*)$
+RewriteCond %{HTTP:Upgrade} websocket [NC]
+RewriteCond %{HTTP:Connection} upgrade [NC]
+RewriteRule ^api/(.*)$ wss://taxtower.in:8002/api/$1 [P,L]
+
+RewriteCond %{REQUEST_URI} ^/api/(.*)$
+RewriteRule ^api/(.*)$ https://taxtower.in:8002/api/$1 [P,L]
+
+# Handle OPTIONS requests for CORS preflight
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteCond %{REQUEST_URI} ^/api/(.*)$
+RewriteRule ^(.*)$ https://taxtower.in:8002/$1 [P,L]
+
+# --- CORS Headers ---
+<IfModule mod_headers.c>
+    # CORS for static files
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|pdf|mp4|mp3|wav|js|css|svg|ico)$">
+        Header set Access-Control-Allow-Origin "*"
+        Header set Access-Control-Allow-Methods "GET, OPTIONS"
+        Header set Access-Control-Allow-Headers "Content-Type, Range"
+        Header set Access-Control-Expose-Headers "Content-Length, Content-Range, ETag"
+        Header set Cache-Control "public, max-age=86400"
+    </FilesMatch>
+    
+    # Security headers
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "no-referrer-when-downgrade"
+</IfModule>
+
+# --- Enable ProxyPassReverse (if mod_proxy is enabled) ---
+ProxyPassReverse /api/ https://taxtower.in:8002/api/
+
+# --- Compression ---
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# --- Error Handling ---
+# Custom error pages (optional)
+# ErrorDocument 404 /404.html
+# ErrorDocument 500 /500.html
+
+# SPA rewrite for non-file requests to index.html (keep _expo/assets exempt)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !^/_expo/
+RewriteCond %{REQUEST_URI} !^/assets/
+RewriteRule ^ index.html [L]

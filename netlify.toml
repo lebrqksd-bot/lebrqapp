@@ -1,0 +1,134 @@
+# ============================================================================
+# Netlify Configuration for LeBRQ Frontend (Expo Web Export)
+# ============================================================================
+# This configuration handles:
+# - SPA routing (404 → index.html for client-side routing)
+# - Environment variables for API communication
+# - Security headers and optimizations
+# - Caching strategies for static assets
+#
+# Deploy command:
+#   npm run export:web
+# Output directory:
+#   dist
+# ============================================================================
+
+# Build settings
+[build]
+  # Command to build the static web export
+  command = "npm run export:web"
+  # Output directory for static files
+  publish = "dist"
+  # Functions directory (if using serverless functions)
+  functions = "netlify/functions"
+
+# Environment variables (set via Netlify UI or deploy context)
+# These can be overridden per environment (production, preview, branch)
+[build.environment]
+  # EXPO_PUBLIC_API_URL is set via Netlify environment variables
+  # Never commit secrets to this file
+  NODE_ENV = "production"
+
+# ============================================================================
+# Redirects & Rewrites
+# ============================================================================
+# SPA Configuration: Any request that doesn't match a file gets routed to
+# index.html, allowing React Router / Expo Router to handle client-side routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  # Force = true ensures this applies to all requests, including those with files
+  force = true
+  conditions = { Negate = true, File = true }
+
+# ============================================================================
+# HTTP Security Headers
+# ============================================================================
+# Protect against XSS, clickjacking, and other common web vulnerabilities
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Prevent clickjacking attacks (only allow framing by same origin)
+    X-Frame-Options = "SAMEORIGIN"
+    
+    # Prevent MIME type sniffing (force Content-Type header)
+    X-Content-Type-Options = "nosniff"
+    
+    # Enable XSS protection in older browsers
+    X-XSS-Protection = "1; mode=block"
+    
+    # Referrer policy: Only send referrer for same-origin requests
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Feature Policy: Restrict browser features (optional)
+    # Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+# ============================================================================
+# Caching Headers for Static Assets
+# ============================================================================
+# Cache static files for performance (served from CDN)
+[[headers]]
+  for = "/_expo/*"
+  [headers.values]
+    # Cache static assets for 1 year (content hash in filename ensures freshness)
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    # Cache images and fonts for 1 year
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ============================================================================
+# Document Caching (short TTL for index.html)
+# ============================================================================
+# Don't cache HTML files for long periods (allows new deploys to be seen)
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    # Cache index.html for 5 minutes, must revalidate
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+# ============================================================================
+# API Configuration via Environment Variables
+# ============================================================================
+# Set these in Netlify UI under Site Settings → Build & Deploy → Environment:
+#
+# Production (main branch):
+#   EXPO_PUBLIC_API_URL = "https://your-api-domain.run.app/api"
+#
+# Preview/Branch Deploys (auto-configuration):
+#   You can use context-specific builds (see below) to target different APIs
+#
+# To test locally:
+#   export EXPO_PUBLIC_API_URL="https://your-api.run.app/api" && npm run export:web
+
+# ============================================================================
+# Deploy Contexts (optional: for branch-specific configurations)
+# ============================================================================
+# Uncomment and configure to use different settings per branch/environment
+
+# Production context (main branch)
+[context.production]
+  command = "npm run export:web"
+  publish = "dist"
+  [context.production.environment]
+    EXPO_PUBLIC_API_URL = "https://your-api-domain.run.app/api"
+    NODE_ENV = "production"
+
+# Preview context (pull requests and branch deploys)
+[context.deploy-preview]
+  command = "npm run export:web"
+  publish = "dist"
+  [context.deploy-preview.environment]
+    # Use same production API for all preview deploys
+    EXPO_PUBLIC_API_URL = "https://your-api-domain.run.app/api"
+    NODE_ENV = "production"
+
+# Branch context (branch-specific configs, if needed)
+# Uncomment to use different API for specific branches
+# [context.develop]
+#   command = "npm run export:web"
+#   [context.develop.environment]
+#     EXPO_PUBLIC_API_URL = "https://staging-api.run.app/api"

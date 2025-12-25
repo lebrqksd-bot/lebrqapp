@@ -1,0 +1,30 @@
+# Production requirements for cPanel deployment
+# Install with: pip install -r requirements_production.txt
+
+# Core FastAPI and ASGI
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+gunicorn>=21.2.0
+
+# Database
+sqlalchemy>=2.0.0
+asyncmy>=0.2.9
+pymysql>=1.1.0
+
+# Authentication & Security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.6
+
+# HTTP Client (for async OTP service)
+httpx>=0.25.0
+
+# Memory monitoring (optional but recommended)
+psutil>=5.9.0
+
+# Compression
+# GZip is built into FastAPI, no extra package needed
+
+# Other dependencies from your main requirements.txt
+# Add any other production-specific packages here
+

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, type TextProps } from 'react-native';
+import { Platform, StyleSheet, Text, type TextProps } from 'react-native';
 
 import { useThemeColor } from '@/hooks/use-theme-color';
 
@@ -16,6 +16,16 @@ export function ThemedText({
   ...rest
 }: ThemedTextProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const fontFamily = Platform.OS === 'web'
+    ? undefined
+    : (
+      type === 'default' ? 'Gabirito-Medium'
+      : type === 'defaultSemiBold' ? 'Gabirito-SemiBold'
+      : type === 'subtitle' ? 'Gabirito'
+      : type === 'title' ? 'Gabirito'
+      : type === 'link' ? 'Gabirito-SemiBold'
+      : undefined
+    );
 
   return (
     <Text
@@ -26,6 +36,7 @@ export function ThemedText({
         type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
         type === 'subtitle' ? styles.subtitle : undefined,
         type === 'link' ? styles.link : undefined,
+        fontFamily ? { fontFamily } : undefined,
         style,
       ]}
       {...rest}
@@ -41,16 +52,13 @@ const styles = StyleSheet.create({
   defaultSemiBold: {
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: '600',
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
     lineHeight: 32,
   },
   subtitle: {
     fontSize: 20,
-    fontWeight: 'bold',
   },
   link: {
     lineHeight: 30,

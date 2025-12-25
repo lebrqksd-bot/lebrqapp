@@ -1,0 +1,109 @@
+# EAS Build - Files to exclude from upload
+# This reduces build archive size and upload time
+
+# Backend (not needed for mobile app build)
+backend/
+backend.zip
+start_backend.sh
+
+# Build artifacts
+dist/
+dist.zip
+web-build/
+.expo/
+.expo-shared/
+
+# Node modules (already excluded by default, but explicit is better)
+node_modules/
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+lebrq.db
+
+# Python virtual environments
+backend/.venv/
+backend/myenv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+
+# Backend uploads and generated files
+backend/uploads/
+backend/*.zip
+backend/*.log
+
+# Documentation files (not needed for build)
+*.md
+!README.md
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Test files
+test_*.js
+test_*.ts
+test_*.tsx
+TEST_*.tsx
+examples/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Environment files
+.env
+.env*.local
+
+# Sensitive files
+google-service-account.json
+*.keystore
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+
+# Git
+.git/
+.gitignore
+
+# EAS
+eas.json.backup
+
+# Static files (if not needed)
+static/
+
+# Images directory at root (if duplicate of assets)
+images/
+
+# IMPORTANT: Do NOT exclude assets/ - needed for app icons and images
+# assets/ is required for the build
+
+# Scripts (if not needed for build)
+scripts/
+
+# Server directory (if not needed)
+server/
+
+# Expo env types (generated)
+expo-env.d.ts
+

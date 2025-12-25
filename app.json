@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "LebrqApp",
-    "slug": "LebrqApp",
+    "name": "leBRQ",
+    "slug": "lebrq",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/play.png",
     "scheme": "lebrqapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -12,20 +12,35 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.taxtower.lebrq",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundImage": "./assets/images/android-icon-background.png"
       },
+      "permissions": [
+        "CAMERA",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ],
+      "targetSdkVersion": 34,
+      "minSdkVersion": 21,
+      "compileSdkVersion": 34,
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "privacyPolicyUrl": "https://taxtower.in/privacy-policy"
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/play.png"
     },
-    "plugins": [
+  "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
@@ -40,6 +55,9 @@
         }
       ]
     ],
+    "extra": {
+      "apiUrl": "https://taxtower.in:8002/api"
+    },
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true

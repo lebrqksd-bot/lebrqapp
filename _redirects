@@ -1,0 +1,26 @@
+# ============================================================================
+# Netlify SPA Routing Configuration
+# ============================================================================
+# This file configures client-side routing for single-page applications
+# served from Netlify CDN.
+#
+# How it works:
+# - Any request that doesn't match a file or directory is redirected to /
+# - The frontend JavaScript then handles routing based on the URL
+#
+# Usage:
+# - This file is automatically read by Netlify during deployment
+# - No additional configuration needed
+#
+# For alternative configuration, see netlify.toml (more feature-rich)
+# ============================================================================
+
+# Catch-all rule: Redirect all non-matching requests to index.html
+# Status 200 means the redirect is transparent (URL doesn't change in browser)
+/*  /index.html  200
+
+# Explicit rules can be placed before the catch-all for static assets
+# These ensure assets are served correctly
+
+# API calls should NOT be redirected - they go to the backend API
+# The backend domain is handled via EXPO_PUBLIC_API_URL environment variable

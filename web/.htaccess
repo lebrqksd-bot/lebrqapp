@@ -1,0 +1,75 @@
+# Enable rewrite engine
+RewriteEngine On
+
+# Ensure index is the default document
+DirectoryIndex index.html
+
+#####################################
+# 1. Serve static files directly
+#####################################
+RewriteCond %{REQUEST_URI} ^/static/
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+#####################################
+# 2. Proxy API requests to FastAPI
+#####################################
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteCond %{HTTP:Upgrade} websocket [NC]
+RewriteCond %{HTTP:Connection} upgrade [NC]
+RewriteRule ^api/(.*)$ wss://taxtower.in:8002/api/$1 [P,L]
+
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/(.*)$ https://taxtower.in:8002/api/$1 [P,L]
+
+<IfModule mod_proxy.c>
+    # For cross-host reverse proxying, do not preserve frontend Host header
+    ProxyPreserveHost Off
+    # Helps fix redirects and Location headers coming from backend
+    ProxyPassReverse /api/ https://taxtower.in:8002/api/
+</IfModule>
+
+#####################################
+# 3. SPA fallback (IMPORTANT FIX)
+#####################################
+# If file or directory does NOT exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
+
+#####################################
+# 4. CORS headers
+#####################################
+<IfModule mod_headers.c>
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization"
+
+    # Aggressive caching for static assets with content hashes
+    <FilesMatch "\.(js|css|woff2?|svg|ico)$">
+        Header set Cache-Control "public, max-age=2592000, immutable"
+    </FilesMatch>
+
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|pdf|mp4|mp3|wav)$">
+        Header set Cache-Control "public, max-age=86400"
+    </FilesMatch>
+
+    # Service worker should not be cached to ensure timely updates
+    <Files "service-worker.js">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+    </Files>
+</IfModule>
+
+#####################################
+# 5. Compression
+#####################################
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE \
+      text/html text/plain text/css text/javascript \
+      application/javascript application/json
+</IfModule>
+
+# Notes:
+# - Ensure Apache modules are enabled: mod_rewrite, mod_proxy, mod_proxy_http, mod_headers, mod_deflate.
+# - For .htaccess to work, Directory block must allow overrides: AllowOverride All.
+# - Deploy this next to index.html (e.g., copy into dist/ after export).

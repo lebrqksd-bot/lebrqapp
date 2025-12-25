@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0; url=/" />
+    <title>Redirecting…</title>
+    <script>
+      // SPA deep-link fallback: preserve path and query by pushing to history then loading index.
+      (function() {
+        var path = window.location.pathname + window.location.search + window.location.hash;
+        // If server supports index.html, load it and let the client router handle the path.
+        // For some CDNs, meta refresh above is enough; this ensures extra safety.
+        if (path && path !== '/' && !path.startsWith('/_expo')) {
+          sessionStorage.setItem('__spa_path__', path);
+        }
+        window.location.replace('/');
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to the app…</p>
+  </body>
+</html>
