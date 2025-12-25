@@ -17,16 +17,16 @@ RewriteRule ^ - [L]
 RewriteCond %{REQUEST_URI} ^/api/
 RewriteCond %{HTTP:Upgrade} websocket [NC]
 RewriteCond %{HTTP:Connection} upgrade [NC]
-RewriteRule ^api/(.*)$ wss://taxtower.in:8002/api/$1 [P,L]
+RewriteRule ^api/(.*)$ wss://fastapi-api-645233144944.asia-south1.run.app/api/$1 [P,L]
 
 RewriteCond %{REQUEST_URI} ^/api/
-RewriteRule ^api/(.*)$ https://taxtower.in:8002/api/$1 [P,L]
+RewriteRule ^api/(.*)$ https://fastapi-api-645233144944.asia-south1.run.app/api/$1 [P,L]
 
 <IfModule mod_proxy.c>
     # For cross-host reverse proxying, do not preserve frontend Host header
     ProxyPreserveHost Off
     # Helps fix redirects and Location headers coming from backend
-    ProxyPassReverse /api/ https://taxtower.in:8002/api/
+    ProxyPassReverse /api/ https://fastapi-api-645233144944.asia-south1.run.app/api/
 </IfModule>
 
 #####################################
