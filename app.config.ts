@@ -6,8 +6,8 @@ import type { ExpoConfig } from 'expo/config';
 // 2) fallback to production URL for web builds
 // 3) fallback to DEV_API for development
 const isProduction = process.env.NODE_ENV === 'production' || process.env.EXPO_PUBLIC_ENV === 'production';
-const PRODUCTION_API = 'https://taxtower.in:8002/api';
-const DEV_API = 'https://taxtower.in:8002/api';
+const PRODUCTION_API = 'https://fastapi-api-645233144944.asia-south1.run.app/api';
+const DEV_API = 'https://fastapi-api-645233144944.asia-south1.run.app/api';
 // Read and sanitize EXPO_PUBLIC_API_URL for production builds to avoid embedding localhost
 const RAW_ENV = (process.env.EXPO_PUBLIC_API_URL || '').replace(/\/$/, '');
 const isLocalEnv = RAW_ENV.includes('localhost') || RAW_ENV.includes('127.0.0.1');
@@ -64,7 +64,7 @@ const config: ExpoConfig = {
         data: [
           {
             scheme: 'https',
-            host: 'taxtower.in',
+            host: 'fastapi-api-645233144944.asia-south1.run.app',
             pathPrefix: '/app',
           },
           {

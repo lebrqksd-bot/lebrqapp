@@ -10,8 +10,7 @@ const getWhatsAppConfig = () => {
     return {
       provider: 'route_mobile',
       businessPhoneNumber: process.env.EXPO_PUBLIC_WHATSAPP_BUSINESS_NUMBER || '+919999999999',
-      apiBaseUrl: process.env.EXPO_PUBLIC_WHATSAPP_API_URL ||https://taxtower.in:8002/api
-',
+      apiBaseUrl: process.env.EXPO_PUBLIC_WHATSAPP_API_URL || 'https://fastapi-api-645233144944.asia-south1.run.app/api',
       mode: process.env.EXPO_PUBLIC_WHATSAPP_MODE || 'test', // test|live
     };
   }
@@ -20,8 +19,7 @@ const getWhatsAppConfig = () => {
   return {
     provider: 'route_mobile',
     businessPhoneNumber: '+919745405059',
-    apiBaseUrl:https://taxtower.in:8002/api
-',
+    apiBaseUrl: 'https://fastapi-api-645233144944.asia-south1.run.app/api',
     mode: 'test',
   };
 };

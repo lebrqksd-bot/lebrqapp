@@ -11,9 +11,9 @@ import { Platform } from 'react-native';
  * - For static web exports, NEVER use localhost - always use production API URL
  * - In production, use HTTPS to avoid mixed content issues
  */
-const DEFAULT_API_BASE_URL = 'https://taxtower.in:8002/api';
+const DEFAULT_API_BASE_URL = 'https://fastapi-api-645233144944.asia-south1.run.app/api';
 // Production API URL - MUST be set via EXPO_PUBLIC_API_URL for static exports
-const PRODUCTION_API_BASE_URL = 'https://taxtower.in:8002/api';
+const PRODUCTION_API_BASE_URL = 'https://fastapi-api-645233144944.asia-south1.run.app/api';
 
 function resolveApiBaseUrl(): string {
   // Check if we're in a static web export (production build)
@@ -24,10 +24,10 @@ function resolveApiBaseUrl(): string {
       !window.location.hostname.includes('192.168.') &&
       !window.location.hostname.includes('10.0.2.2')));
   
-  // Check if we're accessing from production domains (taxtower.in, lebrq.com, etc.)
+  // Check if we're accessing from production domains (lebrqapp.netlify.app, yourdomain.com, etc.)
   const isProductionDomain = Platform.OS === 'web' && 
     typeof window !== 'undefined' && 
-    (window.location.hostname.includes('taxtower.in') ||
+    (window.location.hostname.includes('netlify.app') ||
      window.location.hostname.includes('lebrq.com') ||
      window.location.hostname.includes('lebrq.app'));
   

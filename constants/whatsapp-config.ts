@@ -15,7 +15,7 @@ export const WHATSAPP_CONFIG = {
     username: "Brqglob",
     password: "Brg@678in",
     apiUrl: "https://routemobile.github.io/WhatsApp-Business-API",
-    callbackUrl: "https://taxtower.in:8002/api/whatsapp/callback",
+    callbackUrl: "https://fastapi-api-645233144944.asia-south1.run.app/api/whatsapp/callback",
   },
   
   // Chatbot Auto-reply Configuration
