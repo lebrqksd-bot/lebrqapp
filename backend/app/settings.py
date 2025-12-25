@@ -83,11 +83,13 @@ class Settings(BaseSettings):
     
     # ─── CORS Configuration ─────────────────────────────────────────────────
     # List of allowed origins (frontend domains)
+    # Environment variable: CORS_ORIGINS (comma-separated list)
     # In production, remove "*" and be explicit about allowed origins
     CORS_ORIGINS: List[str] = [
         "http://localhost:19006",
         "http://localhost:3000",
         "http://127.0.0.1:19006",
+        "https://lebrqapp.netlify.app",  # Netlify frontend
     ]
     CORS_ALLOW_CREDENTIALS: bool = False
     
