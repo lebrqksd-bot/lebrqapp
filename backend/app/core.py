@@ -38,11 +38,18 @@ def create_app() -> FastAPI:
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         """Lifespan context manager for startup and shutdown."""
-        # Startup
-        await _startup(app)
+        # Startup - run async but don't block app if it fails
+        try:
+            await _startup(app)
+        except Exception as e:
+            logging.error(f"[Lifespan] Startup error (app will still run): {e}")
+            # Continue anyway - app can serve /health and other basic endpoints
         yield
         # Shutdown
-        await _shutdown(app)
+        try:
+            await _shutdown(app)
+        except Exception as e:
+            logging.error(f"[Lifespan] Shutdown error: {e}")
     
     # Configure FastAPI with memory-conscious settings and lifespan
     app = FastAPI(
