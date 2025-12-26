@@ -711,12 +711,6 @@ def create_app() -> FastAPI:
                         await session.rollback()
         except Exception as outer_err:
             logging.warning(f"[Startup] Admin seeding skipped (likely no database): {outer_err}")
-                except Exception as e:
-                    await session.rollback()
-                    print(f"[Startup] Error seeding admin user: {e}")
-                    import traceback
-                    traceback.print_exc()
-                # Session automatically closed by context manager
         
         # Warm up Razorpay service to avoid first-request latency/errors and validate configuration
         try:
