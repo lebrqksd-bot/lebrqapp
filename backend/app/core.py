@@ -661,8 +661,12 @@ def create_app() -> FastAPI:
         
         try:
             # Set a 10-second timeout for database init
-            import asyncio
-            await asyncio.wait_for(init_db(), timeout=10)
+            # Skip entirely on Cloud Run if flag is set
+            if os.getenv("SKIP_ADMIN_SEEDING") != "true":
+                import asyncio
+                await asyncio.wait_for(init_db(), timeout=10)
+            else:
+                logging.info("[Startup] Skipping init_db() per SKIP_ADMIN_SEEDING=true")
         except asyncio.TimeoutError:
             logging.warning("[Startup] Database initialization timed out (>10s) - starting WITHOUT database")
         except Exception as e:
