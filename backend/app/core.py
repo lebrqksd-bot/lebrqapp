@@ -678,43 +678,45 @@ def create_app() -> FastAPI:
         # Seed default admin if configured
         # CRITICAL FIX: Use AsyncSessionLocal directly instead of get_session() generator
         # get_session() is an async generator for dependency injection, not for direct use
-        try:
-            if settings.ADMIN_USERNAME and settings.ADMIN_PASSWORD:
-                from sqlalchemy import select
-                from app.models import User
-                from app.auth import hash_password
-                from app.db import AsyncSessionLocal
-                
-                # Use AsyncSessionLocal directly with proper context manager
-                async with AsyncSessionLocal() as session:
-                    try:
-                        rs = await session.execute(select(User).where(User.username == settings.ADMIN_USERNAME))
-                        user = rs.scalars().first()
-                        if not user:
-                            # bcrypt limits input to 72 bytes; truncate the admin password if necessary
-                            admin_pw = settings.ADMIN_PASSWORD
-                            try:
-                                b = admin_pw.encode('utf-8')
-                                if len(b) > 72:
-                                    print("Warning: ADMIN_PASSWORD longer than 72 bytes; truncating before hashing.")
-                                    admin_pw = b[:72].decode('utf-8', errors='ignore')
-                            except Exception:
-                                pass
-                            u = User(
-                                username=settings.ADMIN_USERNAME,
-                                password_hash=hash_password(admin_pw),
-                                role="admin",
-                            )
-                            session.add(u)
-                            await session.commit()
-                            print(f"[Startup] Created default admin user: {settings.ADMIN_USERNAME}")
-                        else:
-                            print(f"[Startup] Admin user already exists: {settings.ADMIN_USERNAME}")
-                    except Exception as admin_err:
-                        logging.warning(f"[Startup] Could not seed admin user: {admin_err}")
-                        await session.rollback()
-        except Exception as outer_err:
-            logging.warning(f"[Startup] Admin seeding skipped (likely no database): {outer_err}")
+        # SKIP admin seeding on Cloud Run to avoid database wait at startup
+        if os.getenv("SKIP_ADMIN_SEEDING") != "true":
+            try:
+                if settings.ADMIN_USERNAME and settings.ADMIN_PASSWORD:
+                    from sqlalchemy import select
+                    from app.models import User
+                    from app.auth import hash_password
+                    from app.db import AsyncSessionLocal
+                    
+                    # Use AsyncSessionLocal directly with proper context manager
+                    async with AsyncSessionLocal() as session:
+                        try:
+                            rs = await session.execute(select(User).where(User.username == settings.ADMIN_USERNAME))
+                            user = rs.scalars().first()
+                            if not user:
+                                # bcrypt limits input to 72 bytes; truncate the admin password if necessary
+                                admin_pw = settings.ADMIN_PASSWORD
+                                try:
+                                    b = admin_pw.encode('utf-8')
+                                    if len(b) > 72:
+                                        print("Warning: ADMIN_PASSWORD longer than 72 bytes; truncating before hashing.")
+                                        admin_pw = b[:72].decode('utf-8', errors='ignore')
+                                except Exception:
+                                    pass
+                                u = User(
+                                    username=settings.ADMIN_USERNAME,
+                                    password_hash=hash_password(admin_pw),
+                                    role="admin",
+                                )
+                                session.add(u)
+                                await session.commit()
+                                print(f"[Startup] Created default admin user: {settings.ADMIN_USERNAME}")
+                            else:
+                                print(f"[Startup] Admin user already exists: {settings.ADMIN_USERNAME}")
+                        except Exception as admin_err:
+                            logging.warning(f"[Startup] Could not seed admin user: {admin_err}")
+                            await session.rollback()
+            except Exception as outer_err:
+                logging.warning(f"[Startup] Admin seeding skipped (likely no database): {outer_err}")
         
         # Warm up Razorpay service to avoid first-request latency/errors and validate configuration
         try:
