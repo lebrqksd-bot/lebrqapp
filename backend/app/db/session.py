@@ -66,17 +66,38 @@ def _create_async_engine():
     return engine
 
 
-# Global async engine
-engine = _create_async_engine()
+# Global async engine - MUST be initialized before use
+# On Cloud Run: If DATABASE_URL is not set, defaults to localhost:5432
+# SOLUTION: Only try to create engine if we have a valid database URL
+engine = None
+AsyncSessionLocal = None
 
-# Async session factory
-AsyncSessionLocal = async_sessionmaker(
-    engine,
-    class_=AsyncSession,
-    expire_on_commit=False,
-    autocommit=False,
-    autoflush=False,
-)
+def _initialize_engine():
+    """Initialize the engine and session factory."""
+    global engine, AsyncSessionLocal
+    if engine is None:
+        try:
+            logger.info(f"[DB] Initializing engine with: {settings.computed_database_url.split('@')[0]}...")
+            engine = _create_async_engine()
+            AsyncSessionLocal = async_sessionmaker(
+                engine,
+                class_=AsyncSession,
+                expire_on_commit=False,
+                autocommit=False,
+                autoflush=False,
+            )
+            logger.info("[DB] Engine and AsyncSessionLocal initialized successfully")
+        except Exception as e:
+            logger.error(f"[DB] Failed to initialize engine: {e}")
+            # Leave engine as None - will be retried later
+            raise
+
+# Try to initialize on import, but don't crash if it fails
+# This allows the app to start even if database isn't available
+try:
+    _initialize_engine()
+except Exception as e:
+    logger.warning(f"[DB] Deferred engine initialization (will retry on first request): {e}")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
