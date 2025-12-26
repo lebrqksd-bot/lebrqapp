@@ -21,7 +21,7 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://taxtower.in:8002/api"
+        "EXPO_PUBLIC_API_URL": "https://fastapi-api-645233144944.asia-south1.run.app/api"
       }
     }
   },
