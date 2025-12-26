@@ -1,0 +1,23 @@
+steps:
+  # Build Docker image without cache
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--no-cache'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/lebrq-backend:latest'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/lebrq-backend:$BUILD_ID'
+      - '.'
+
+  # Push to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/lebrq-backend:latest'
+
+images:
+  - 'gcr.io/$PROJECT_ID/lebrq-backend:latest'
+
+options:
+  machineType: 'E2_HIGHCPU_8'
