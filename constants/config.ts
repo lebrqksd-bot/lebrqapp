@@ -11,6 +11,7 @@ import { Platform } from 'react-native';
  * - For static web exports, NEVER use localhost - always use production API URL
  * - In production, use HTTPS to avoid mixed content issues
  */
+// HARDCODED for static web export - environment variables not reliable in Metro bundler
 const DEFAULT_API_BASE_URL = 'https://fastapi-api-645233144944.asia-south1.run.app/api';
 // Production API URL - MUST be set via EXPO_PUBLIC_API_URL for static exports
 const PRODUCTION_API_BASE_URL = 'https://fastapi-api-645233144944.asia-south1.run.app/api';
@@ -75,11 +76,13 @@ function resolveApiBaseUrl(): string {
     }
   }
   
-  // Development or native platforms
-  let base = (process.env.EXPO_PUBLIC_API_URL?.trim() || DEFAULT_API_BASE_URL).replace(/\/$/, '');
+  // Development or native platforms - use production API as safe default
+  // Note: process.env substitution is unreliable in Metro bundler for static exports
+  // For static web exports, always use PRODUCTION_API_BASE_URL
+  let base = PRODUCTION_API_BASE_URL.replace(/\/$/, '');
   // Always avoid localhost targets; prefer production URL
   if (base.includes('localhost') || base.includes('127.0.0.1')) {
-    console.warn('[config] EXPO_PUBLIC_API_URL points to localhost. Using production URL instead.');
+    console.warn('[config] API URL contains localhost. Using production URL instead.');
     base = PRODUCTION_API_BASE_URL;
   }
   

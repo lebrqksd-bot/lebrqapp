@@ -12,7 +12,7 @@ from typing import Dict, Any, Optional
 
 # Configuration
 # Default to production API; can be overridden via env `API_BASE_URL`.
-API_BASE_URL = "https://taxtower.in:8002/api"
+API_BASE_URL = "https://fastapi-api-645233144944.asia-south1.run.app/api"
 ADMIN_TOKEN = ""  # Prefer setting via environment `ADMIN_TOKEN`
 
 class ChatbotValidator:
