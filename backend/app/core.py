@@ -616,6 +616,7 @@ def create_app() -> FastAPI:
     # but should be disabled in production in favor of Nginx
 
     async def _startup(app: FastAPI) -> None:
+        print("[Startup] Beginning startup sequence")
         # Set up asyncio error handler to catch SSL protocol MemoryErrors
         # This prevents SSL protocol errors from crashing the server
         def handle_asyncio_exception(loop, context):
@@ -817,6 +818,8 @@ def create_app() -> FastAPI:
             logging.info("[Startup] Shared thread pool executor initialized (max 10 workers)")
         except Exception as e:
             logging.warning(f"[Startup] Failed to initialize thread pool executor: {e}")
+        
+        print("[Startup] ✓ Startup sequence COMPLETE - app is ready to serve requests")
 
     async def _shutdown(app: FastAPI) -> None:
         """Cleanup on shutdown - ensures all resources are properly released."""
