@@ -8,10 +8,27 @@ from ..schemas.venues import VenueOut, SpaceOut, VenueWithSpaces
 from .auth import require_role
 from pydantic import BaseModel, Field, model_validator
 import logging
+import json
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/venues", tags=["venues"])
+
+
+def parse_json_field(value: Any) -> Any:
+    """Parse JSON string fields from database.
+    
+    PostgreSQL may store JSON as text strings when migrated from other databases.
+    This helper safely parses those strings back to Python objects.
+    """
+    if value is None:
+        return None
+    if isinstance(value, str):
+        try:
+            return json.loads(value)
+        except (json.JSONDecodeError, TypeError):
+            return value
+    return value
 
 
 @router.get("/", response_model=List[VenueOut])
@@ -66,17 +83,24 @@ async def get_space(space_id: int, session: AsyncSession = Depends(get_session))
         if not space:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Space not found")
         
+        # Parse JSON string fields from database (may be stored as text after migration)
+        features_data = parse_json_field(space.features)
+        pricing_overrides_data = parse_json_field(space.pricing_overrides)
+        event_types_data = parse_json_field(space.event_types)
+        stage_options_data = parse_json_field(space.stage_options)
+        banner_sizes_data = parse_json_field(space.banner_sizes)
+        
         # Normalize features safely without modifying the space object directly
         # We'll create a normalized copy and use it only for serialization
         normalized_features = None
         
-        if space.features:
+        if features_data:
             try:
                 # Handle both list format (old) and dict format (new with top_banners)
-                if isinstance(space.features, dict):
+                if isinstance(features_data, dict):
                     # It's a dict with hall_features and/or top_banners
                     normalized_dict = {}
-                    for key, value in space.features.items():
+                    for key, value in features_data.items():
                         if key == 'hall_features' and isinstance(value, list):
                             normalized_features_list = []
                             for f in value:
@@ -96,10 +120,10 @@ async def get_space(space_id: int, session: AsyncSession = Depends(get_session))
                             # Preserve other keys like top_banners
                             normalized_dict[key] = value
                     normalized_features = normalized_dict
-                elif isinstance(space.features, list):
+                elif isinstance(features_data, list):
                     # It's a list of hall features (old format)
                     normalized_features_list = []
-                    for f in space.features:
+                    for f in features_data:
                         if isinstance(f, dict):
                             normalized_f = dict(f)  # Create a copy
                             # Normalize paid field to boolean - handle various formats
@@ -114,11 +138,11 @@ async def get_space(space_id: int, session: AsyncSession = Depends(get_session))
                     normalized_features = normalized_features_list
                 else:
                     # Unknown format, keep as is
-                    normalized_features = space.features
+                    normalized_features = features_data
             except Exception as e:
                 logger.warning(f"[VENUES] Error normalizing features for space {space_id}: {e}", exc_info=True)
-                # On error, keep original features
-                normalized_features = space.features
+                # On error, keep parsed features
+                normalized_features = features_data
         
         # Create a dict representation of the space for response
         # This avoids modifying the SQLAlchemy object directly
@@ -131,11 +155,11 @@ async def get_space(space_id: int, session: AsyncSession = Depends(get_session))
                 'capacity': space.capacity,
                 'price_per_hour': space.price_per_hour,
                 'image_url': space.image_url,
-                'features': normalized_features if normalized_features is not None else space.features,
-                'pricing_overrides': space.pricing_overrides,
-                'event_types': space.event_types,
-                'stage_options': space.stage_options,
-                'banner_sizes': space.banner_sizes,
+                'features': normalized_features if normalized_features is not None else features_data,
+                'pricing_overrides': pricing_overrides_data,
+                'event_types': event_types_data,
+                'stage_options': stage_options_data,
+                'banner_sizes': banner_sizes_data,
                 'active': space.active,
                 'created_at': space.created_at,
                 'updated_at': space.updated_at,
