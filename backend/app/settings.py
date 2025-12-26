@@ -220,12 +220,14 @@ class Settings(BaseSettings):
         
         errors = []
         
-        # Check DATABASE_URL is set (not default)
-        if not self.DATABASE_URL or "localhost" in self.DATABASE_URL.lower():
-            errors.append("DATABASE_URL must be set to production database (not localhost)")
+        # Check DATABASE_URL is set (not default) - but only if in actual production
+        # Allow development/testing mode to proceed without this check
+        if self.is_production:
+            if not self.DATABASE_URL or "localhost" in self.DATABASE_URL.lower():
+                errors.append("DATABASE_URL must be set to production database (not localhost)")
         
-        # Check SECRET_KEY is changed from default
-        if self.SECRET_KEY == "change-me-in-production":
+        # Check SECRET_KEY is changed from default - but allow in non-production
+        if self.is_production and self.SECRET_KEY == "change-me-in-production":
             errors.append("SECRET_KEY must be changed from default value")
         
         # Warn about admin credentials
