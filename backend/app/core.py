@@ -724,18 +724,26 @@ def create_app() -> FastAPI:
         
         # Warm up Razorpay service to avoid first-request latency/errors and validate configuration
         try:
-            from app.razorpay_service import get_razorpay_service, validate_razorpay_config
-            if not validate_razorpay_config():
-                app.state.payments_enabled = False
-                logging.critical("[Startup] Razorpay keys missing/invalid. Payments disabled until configured.")
-            else:
-                svc = get_razorpay_service()
-                if getattr(svc, 'is_configured', lambda: False)():
-                    app.state.payments_enabled = True
-                    logging.info("[Startup] Razorpay service warmed up (LIVE mode)")
-                else:
+            # Set a 5-second timeout for Razorpay initialization
+            import asyncio
+            async def razorpay_init():
+                from app.razorpay_service import get_razorpay_service, validate_razorpay_config
+                if not validate_razorpay_config():
                     app.state.payments_enabled = False
-                    logging.warning("[Startup] Razorpay service not configured; payments disabled")
+                    logging.critical("[Startup] Razorpay keys missing/invalid. Payments disabled until configured.")
+                else:
+                    svc = get_razorpay_service()
+                    if getattr(svc, 'is_configured', lambda: False)():
+                        app.state.payments_enabled = True
+                        logging.info("[Startup] Razorpay service warmed up (LIVE mode)")
+                    else:
+                        app.state.payments_enabled = False
+                        logging.warning("[Startup] Razorpay service not configured; payments disabled")
+            
+            await asyncio.wait_for(razorpay_init(), timeout=5)
+        except asyncio.TimeoutError:
+            app.state.payments_enabled = False
+            logging.warning("[Startup] Razorpay warm-up timed out (>5s) - payments disabled")
         except Exception as e:
             app.state.payments_enabled = False
             logging.warning(f"[Startup] Razorpay warm-up failed: {e}")
