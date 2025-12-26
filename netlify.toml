@@ -16,7 +16,7 @@
 # Build settings
 [build]
   # Command to build the static web export
-  command = "ls -la components/ && ls -la components/Float* && npm run export:web"
+  command = "echo '=== Components folder ===' && ls -la components/ && echo '=== All themed files ===' && find . -name '*themed*' -type f && npm run export:web"
   # Output directory for static files
   publish = "dist"
   # Functions directory (if using serverless functions)
