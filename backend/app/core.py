@@ -660,7 +660,11 @@ def create_app() -> FastAPI:
         logging.info("[Startup] Asyncio exception handler configured for SSL/Memory errors")
         
         try:
-            await init_db()
+            # Set a 10-second timeout for database init
+            import asyncio
+            await asyncio.wait_for(init_db(), timeout=10)
+        except asyncio.TimeoutError:
+            logging.warning("[Startup] Database initialization timed out (>10s) - starting WITHOUT database")
         except Exception as e:
             logging.error(f"[Startup] Database initialization failed: {e}")
             logging.warning("[Startup] Starting app WITHOUT database connection - API may have limited functionality")
