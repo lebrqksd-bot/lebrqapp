@@ -652,7 +652,13 @@ def create_app() -> FastAPI:
         loop.set_exception_handler(handle_asyncio_exception)
         logging.info("[Startup] Asyncio exception handler configured for SSL/Memory errors")
         
-        await init_db()
+        try:
+            await init_db()
+        except Exception as e:
+            logging.error(f"[Startup] Database initialization failed: {e}")
+            logging.warning("[Startup] Starting app WITHOUT database connection - API may have limited functionality")
+            # Allow app to start even if database connection fails
+            # This is useful for health checks and diagnostics
         try:
             abs_uploads = os.path.abspath(uploads_dir)
             print(f"[Startup] Static uploads mounted at /static -> {abs_uploads}")
