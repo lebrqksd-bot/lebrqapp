@@ -90,6 +90,8 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://127.0.0.1:19006",
         "https://lebrqapp.netlify.app",  # Netlify frontend
+        "https://lebrq.com",              # Production custom domain
+        "https://www.lebrq.com",          # Production custom domain with www
     ]
     CORS_ALLOW_CREDENTIALS: bool = False
     
