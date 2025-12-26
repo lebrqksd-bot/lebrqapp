@@ -186,6 +186,9 @@ export default function MeetingRoomPage() {
     blob?: Blob;
   } | null>(null);
 
+  // Image loading states for feature images
+  const [imageLoadingStates, setImageLoadingStates] = useState<Record<string, boolean>>({});
+
 
   // Helper function to construct full image URL
   const getImageUrl = (imageUrl?: string | null): string | null => {
