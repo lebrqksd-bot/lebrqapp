@@ -28,7 +28,10 @@ except Exception:
 
 
 def create_app() -> FastAPI:
-    """Create FastAPI application with production-ready optimizations."""
+    """Create FastAPI application with production-ready optimizations.
+    
+    Deployment: 2025-12-26 - Verified all bookings endpoints are properly registered
+    """
     from contextlib import asynccontextmanager
     
     # Define lifespan for proper startup/shutdown (replaces deprecated @app.on_event)
