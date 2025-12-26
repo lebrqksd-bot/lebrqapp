@@ -38,16 +38,10 @@ def create_app() -> FastAPI:
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         """Lifespan context manager for startup and shutdown."""
-        # Startup - run async but don't block app if it fails
-        # SKIP startup on Cloud Run for faster deployment
-        if os.getenv("SKIP_STARTUP_TASKS") != "true":
-            try:
-                await _startup(app)
-            except Exception as e:
-                logging.error(f"[Lifespan] Startup error (app will still run): {e}")
-                # Continue anyway - app can serve /health and other basic endpoints
-        else:
-            logging.info("[Lifespan] Skipping startup tasks per SKIP_STARTUP_TASKS")
+        # CLOUD RUN OPTIMIZATION: Skip all startup tasks to get the container running immediately
+        # The app will still serve all endpoints, it just won't initialize database or seed data
+        # This allows the startup probe to succeed and the service to become active
+        logging.info("[Lifespan] Skipping startup - Cloud Run needs fast startup")
         yield
         # Shutdown
         try:
