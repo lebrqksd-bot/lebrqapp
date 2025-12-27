@@ -25,6 +25,9 @@ class ProgramParticipant(Base):
     scan_count: Mapped[Optional[int]] = mapped_column(Integer, default=0, nullable=True)  # Track number of times ticket has been scanned
     joined_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     verified_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)  # When entry was verified
+    # Event ticketing system integration (columns added by migration)
+    event_schedule_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, comment="Links participant to specific event schedule")
+    event_definition_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, comment="Links participant to event definition")
 
 
 from datetime import datetime, date
@@ -248,6 +251,10 @@ class Booking(Base):
     broker_settled_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True, comment="When broker payment was settled")
     broker_settled_by_user_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("users.id"), nullable=True, comment="User who marked broker as settled")
     admin_viewed_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True, comment="When admin viewed this booking (for badge tracking)")
+    # Event ticketing system integration (columns added by migration)
+    event_schedule_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, comment="Links booking to specific event schedule")
+    event_definition_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, comment="Links booking to event definition")
+    ticket_type_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, comment="Links booking to specific ticket type")
 
 
 class BookingItem(Base):

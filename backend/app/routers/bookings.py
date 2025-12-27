@@ -12,6 +12,12 @@ from datetime import datetime, date, timezone, timedelta
 from app.core import settings
 from app.notifications import NotificationService
 from app.services.client_notification_service import ClientNotificationService
+# Import event ticketing models (if table doesn't exist yet, operations will be no-ops)
+try:
+    from app.models_events import EventSchedule, EventDefinition
+    EVENT_TICKETING_ENABLED = True
+except ImportError:
+    EVENT_TICKETING_ENABLED = False
 try:
     from zoneinfo import ZoneInfo  # Python 3.9+
 except Exception:  # pragma: no cover - very old Python fallback
@@ -158,6 +164,45 @@ async def create_booking(payload: BookingCreate, session: AsyncSession = Depends
         else:
             customer_note = f"||TRANSPORT_LOCATIONS:{transport_json}"
     
+    # Validate event schedule availability if event_schedule_id is provided
+    event_schedule_id = getattr(payload, 'event_schedule_id', None)
+    event_definition_id = getattr(payload, 'event_definition_id', None)
+    
+    if EVENT_TICKETING_ENABLED and event_schedule_id:
+        try:
+            schedule_result = await session.execute(
+                select(EventSchedule).where(EventSchedule.id == event_schedule_id)
+            )
+            schedule = schedule_result.scalar_one_or_none()
+            
+            if schedule:
+                # Check ticket availability
+                requested_tickets = payload.attendees or 1
+                tickets_available = schedule.max_tickets - schedule.tickets_sold
+                
+                if schedule.status != 'scheduled':
+                    raise HTTPException(status_code=400, detail=f"Event is {schedule.status}")
+                
+                if schedule.is_blocked:
+                    raise HTTPException(status_code=400, detail="This time slot is blocked")
+                
+                if tickets_available < requested_tickets:
+                    raise HTTPException(
+                        status_code=400, 
+                        detail=f"Only {tickets_available} tickets available"
+                    )
+                
+                # Get the event_definition_id from the schedule
+                event_definition_id = schedule.event_definition_id
+        except HTTPException:
+            raise
+        except Exception as e:
+            # Log but don't block if event tables don't exist yet
+            import logging
+            logging.warning(f"Event schedule check skipped: {e}")
+            event_schedule_id = None
+            event_definition_id = None
+    
     booking_ref = "BK-" + uuid.uuid4().hex[:10].upper()
     b = Booking(
         booking_reference=booking_ref,
@@ -179,6 +224,16 @@ async def create_booking(payload: BookingCreate, session: AsyncSession = Depends
         banner_image_url=payload.banner_image_url,
         stage_banner_url=payload.stage_banner_url,
     )
+    
+    # Add event ticketing fields if available (columns may not exist yet)
+    try:
+        if event_schedule_id:
+            b.event_schedule_id = event_schedule_id
+        if event_definition_id:
+            b.event_definition_id = event_definition_id
+    except Exception:
+        pass  # Columns don't exist yet, ignore
+    
     session.add(b)
     await session.flush()  # to get booking.id
 

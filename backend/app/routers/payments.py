@@ -20,6 +20,13 @@ from app.schemas import (
     AdvancePaymentSettingsRequest
 )
 
+# Import event ticketing models (if available)
+try:
+    from app.models_events import EventSchedule, EventDefinition
+    EVENT_TICKETING_ENABLED = True
+except ImportError:
+    EVENT_TICKETING_ENABLED = False
+
 logger = logging.getLogger(__name__)
 
 # Razorpay API base URL for async client
@@ -115,6 +122,36 @@ async def handle_payment_callback(
 ):
     try:
         if verification_result.get("success") and booking:
+            
+            # --- RESERVE TICKETS IN EVENT SCHEDULE ---
+            # This should happen FIRST before creating participants
+            event_schedule_id = getattr(booking, 'event_schedule_id', None)
+            event_definition_id = getattr(booking, 'event_definition_id', None)
+            
+            if EVENT_TICKETING_ENABLED and event_schedule_id:
+                try:
+                    schedule = db.query(EventSchedule).filter(
+                        EventSchedule.id == event_schedule_id
+                    ).with_for_update().first()  # Lock row for atomic update
+                    
+                    if schedule:
+                        quantity = booking.attendees or 1
+                        tickets_available = schedule.max_tickets - schedule.tickets_sold
+                        
+                        if tickets_available >= quantity:
+                            schedule.tickets_sold += quantity
+                            db.commit()
+                            logger.info(f"Reserved {quantity} tickets for schedule {schedule.id}")
+                        else:
+                            # Race condition: not enough tickets
+                            logger.error(
+                                f"Ticket oversold for schedule {schedule.id}. "
+                                f"Available: {tickets_available}, Requested: {quantity}"
+                            )
+                            # Don't fail the payment, but log for manual resolution
+                except Exception as e:
+                    logger.error(f"Failed to reserve tickets: {e}")
+                    db.rollback()
 
             # --- LIVE SHOW PARTICIPANT ---
             if booking.booking_type == "live-":
@@ -141,6 +178,16 @@ async def handle_payment_callback(
                             is_verified=False,
                             joined_at=datetime.utcnow(),
                         )
+                        
+                        # Link to event schedule if available
+                        try:
+                            if event_schedule_id:
+                                participant.event_schedule_id = event_schedule_id
+                            if event_definition_id:
+                                participant.event_definition_id = event_definition_id
+                        except Exception:
+                            pass  # Columns may not exist yet
+                        
                         db.add(participant)
                         db.commit()
 

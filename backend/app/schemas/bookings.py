@@ -54,6 +54,9 @@ class BookingCreate(BaseModel):
     default_pickup_location: Optional[str] = None
     # Transport locations with guest details
     transport_locations: Optional[List[Dict[str, Any]]] = None
+    # Event ticketing system integration
+    event_schedule_id: Optional[int] = None
+    event_definition_id: Optional[int] = None
 
 
 class BookingOut(BaseModel):
