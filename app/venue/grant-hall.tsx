@@ -3,7 +3,7 @@ import AudioRecorder from '@/components/AudioRecorder';
 import AuthModal from '@/components/AuthModal';
 import OfferPopup from '@/components/OfferPopup';
 import TimeSlotSelector from '@/components/TimeSlotSelector';
-// import { TransportationLocation } from '@/components/TransportationSection';
+import { TransportationLocation } from '@/components/TransportationSection';
 import ItemMediaViewer from '@/components/item/ItemMediaViewer';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -1059,10 +1059,10 @@ export default function GrantHallPage() {
   const [hours, setHours] = useState<number>(2);
   const [guests, setGuests] = useState<number>(50);
   const [bookingType, setBookingType] = useState<string>('one_day');
-  // Transportation state (temporarily disabled)
+  // Transportation state
   // Keep an internal `transportEstimate` state to avoid undefined references in restore/effects.
   // Locations are managed by `TransportationSection` when enabled.
-  // const [transportLocations, setTransportLocations] = useState<TransportationLocation[]>([]);
+  const [transportLocations, setTransportLocations] = useState<TransportationLocation[]>([]);
   const [transportEstimate, setTransportEstimate] = useState<number>(0);
   
   // Audio recording state (temporary storage)
