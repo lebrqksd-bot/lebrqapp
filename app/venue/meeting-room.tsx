@@ -66,11 +66,11 @@ import { CONFIG } from '@/constants/config';
 
 // Default fallback data
 const DEFAULT_HALL_FEATURES: HallFeature[] = [
-  { id: 'tv', label: 'TV/Display', image: { uri: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=400&q=60&auto=format&fit=crop' } },
-  { id: 'wifi', label: 'Wi‑Fi', image: { uri: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&q=60&auto=format&fit=crop' } },
-  { id: 'ac', label: 'AC', image: { uri: 'https://images.unsplash.com/photo-1604335399105-a0d7d9c9f51f?w=400&q=60&auto=format&fit=crop' } },
-  { id: 'capacity', label: '12 Seats', image: { uri: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=400&q=60&auto=format&fit=crop' } },
-  { id: 'drinks', label: 'Drinking Water', image: { uri: 'https://images.unsplash.com/photo-1510626176961-4b57d4fbad03?w=400&q=60&auto=format&fit=crop' } },
+  { id: 'tv', label: 'TV/Display', image: { uri: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' } },
+  { id: 'wifi', label: 'Wi‑Fi', image: { uri: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' } },
+  { id: 'ac', label: 'AC', image: { uri: 'https://images.unsplash.com/photo-1604335399105-a0d7d9c9f51f?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' } },
+  { id: 'capacity', label: '12 Seats', image: { uri: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' } },
+  { id: 'drinks', label: 'Drinking Water', image: { uri: 'https://images.unsplash.com/photo-1510626176961-4b57d4fbad03?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' } },
 ];
 
 // Meeting room hourly rate
