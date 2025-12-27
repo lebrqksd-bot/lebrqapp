@@ -377,7 +377,25 @@ async def create_space(venue_id: int, payload: SpaceCreate, session: AsyncSessio
     session.add(space)
     await session.commit()
     await session.refresh(space)
-    return space
+    
+    # Parse JSON fields for response (may be stored as strings in PostgreSQL)
+    return {
+        "id": space.id,
+        "venue_id": space.venue_id,
+        "name": space.name,
+        "description": space.description,
+        "capacity": space.capacity,
+        "price_per_hour": space.price_per_hour,
+        "image_url": space.image_url,
+        "features": parse_json_field(space.features),
+        "pricing_overrides": parse_json_field(space.pricing_overrides),
+        "event_types": parse_json_field(space.event_types),
+        "stage_options": parse_json_field(space.stage_options),
+        "banner_sizes": parse_json_field(space.banner_sizes),
+        "active": space.active,
+        "created_at": space.created_at,
+        "updated_at": space.updated_at,
+    }
 
 
 @router.patch("/spaces/{space_id}", response_model=SpaceOut, dependencies=[Depends(require_role("admin"))])
@@ -545,7 +563,24 @@ async def update_space(space_id: int, payload: SpaceUpdate, session: AsyncSessio
     if space.features:
         print(f"[VENUES] Space {space_id} - Features after save: {space.features}")
     
-    return space
+    # Parse JSON fields for response (may be stored as strings in PostgreSQL)
+    return {
+        "id": space.id,
+        "venue_id": space.venue_id,
+        "name": space.name,
+        "description": space.description,
+        "capacity": space.capacity,
+        "price_per_hour": space.price_per_hour,
+        "image_url": space.image_url,
+        "features": parse_json_field(space.features),
+        "pricing_overrides": parse_json_field(space.pricing_overrides),
+        "event_types": parse_json_field(space.event_types),
+        "stage_options": parse_json_field(space.stage_options),
+        "banner_sizes": parse_json_field(space.banner_sizes),
+        "active": space.active,
+        "created_at": space.created_at,
+        "updated_at": space.updated_at,
+    }
 
 
 @router.delete("/spaces/{space_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(require_role("admin"))])
