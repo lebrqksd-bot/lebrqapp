@@ -623,9 +623,34 @@ export default function GrantHallPage() {
   // Use API data or fallback to defaults
   // Ensure hallFeatures is always an array and normalize paid field
   const hallFeatures: HallFeature[] = useMemo(() => {
-    // Always use DEFAULT_HALL_FEATURES, ignoring API data
+    if (!spaceData?.features) return DEFAULT_HALL_FEATURES;
+    
+    // Handle dict format with hall_features key
+    if (typeof spaceData.features === 'object' && !Array.isArray(spaceData.features)) {
+      if (Array.isArray(spaceData.features.hall_features)) {
+        return spaceData.features.hall_features.map((f: any) => ({
+          id: f.id || f.label?.toLowerCase().replace(/\s+/g, '-'),
+          label: f.label,
+          image: typeof f.image === 'string' ? { uri: f.image } : f.image,
+          paid: f.paid || false,
+          price: f.price || 0,
+        }));
+      }
+    }
+    
+    // Handle array format directly
+    if (Array.isArray(spaceData.features)) {
+      return spaceData.features.map((f: any) => ({
+        id: f.id || f.label?.toLowerCase().replace(/\s+/g, '-'),
+        label: f.label,
+        image: typeof f.image === 'string' ? { uri: f.image } : f.image,
+        paid: f.paid || false,
+        price: f.price || 0,
+      }));
+    }
+    
     return DEFAULT_HALL_FEATURES;
-  }, []);
+  }, [spaceData]);
 
   // Extract top banners: force static banner image from assets as requested
   const topBanners = useMemo(() => {

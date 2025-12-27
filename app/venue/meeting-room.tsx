@@ -271,10 +271,36 @@ export default function MeetingRoomPage() {
     return [];
   }, [spaceData]);
 
-  // Always use DEFAULT_HALL_FEATURES, ignoring API data
+  // Use API data or fallback to defaults - fetch features dynamically from space table
   const hallFeatures: HallFeature[] = useMemo(() => {
+    if (!spaceData?.features) return DEFAULT_HALL_FEATURES;
+    
+    // Handle dict format with hall_features key
+    if (typeof spaceData.features === 'object' && !Array.isArray(spaceData.features)) {
+      if (Array.isArray(spaceData.features.hall_features)) {
+        return spaceData.features.hall_features.map((f: any) => ({
+          id: f.id || f.label?.toLowerCase().replace(/\s+/g, '-'),
+          label: f.label,
+          image: typeof f.image === 'string' ? { uri: f.image } : f.image,
+          paid: f.paid || false,
+          price: f.price || 0,
+        }));
+      }
+    }
+    
+    // Handle array format directly
+    if (Array.isArray(spaceData.features)) {
+      return spaceData.features.map((f: any) => ({
+        id: f.id || f.label?.toLowerCase().replace(/\s+/g, '-'),
+        label: f.label,
+        image: typeof f.image === 'string' ? { uri: f.image } : f.image,
+        paid: f.paid || false,
+        price: f.price || 0,
+      }));
+    }
+    
     return DEFAULT_HALL_FEATURES;
-  }, []);
+  }, [spaceData]);
 
   // Use API data or fallback to defaults
   const roomHourlyRate = spaceData?.price_per_hour || 1000;
