@@ -99,14 +99,14 @@ INSERT INTO event_definitions (
 SELECT generate_recurring_schedules(
     (SELECT id FROM event_definitions WHERE event_code = 'yoga-morning'),
     CURRENT_DATE,
-    CURRENT_DATE + INTERVAL '30 days'
+    (CURRENT_DATE + INTERVAL '30 days')::DATE
 );
 
 -- Generate Zumba schedules
 SELECT generate_recurring_schedules(
     (SELECT id FROM event_definitions WHERE event_code = 'zumba-morning'),
     CURRENT_DATE,
-    CURRENT_DATE + INTERVAL '30 days'
+    (CURRENT_DATE + INTERVAL '30 days')::DATE
 );
 
 
