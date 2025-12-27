@@ -69,7 +69,31 @@ async def list_spaces(
         .offset(skip)
         .limit(limit)
     )
-    return rs.scalars().all()
+    spaces = rs.scalars().all()
+    
+    # Parse JSON fields for each space (may be stored as strings after PostgreSQL migration)
+    result = []
+    for space in spaces:
+        space_dict = {
+            "id": space.id,
+            "venue_id": space.venue_id,
+            "name": space.name,
+            "description": space.description,
+            "capacity": space.capacity,
+            "price_per_hour": space.price_per_hour,
+            "image_url": space.image_url,
+            "features": parse_json_field(space.features),
+            "pricing_overrides": parse_json_field(space.pricing_overrides),
+            "event_types": parse_json_field(space.event_types),
+            "stage_options": parse_json_field(space.stage_options),
+            "banner_sizes": parse_json_field(space.banner_sizes),
+            "active": space.active,
+            "created_at": space.created_at,
+            "updated_at": space.updated_at,
+        }
+        result.append(space_dict)
+    
+    return result
 
 
 @router.get("/spaces/{space_id}", response_model=SpaceOut)
