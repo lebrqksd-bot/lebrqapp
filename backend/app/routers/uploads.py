@@ -327,8 +327,32 @@ async def upload_poster(file: Annotated[UploadFile, File(...)]):
             dest.unlink()
         raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
     
+    # Optimize the uploaded image
+    optimization_info = None
+    try:
+        from ..utils.image_optimizer import optimize_image, PILLOW_AVAILABLE
+        if PILLOW_AVAILABLE:
+            optimized_path, orig_size, opt_size = optimize_image(
+                str(dest),
+                image_type="banner",
+                keep_original=False
+            )
+            # Update filename if extension changed
+            name = os.path.basename(optimized_path)
+            optimization_info = {
+                "original_kb": round(orig_size / 1024, 1),
+                "optimized_kb": round(opt_size / 1024, 1),
+                "reduction_pct": round((1 - opt_size / orig_size) * 100, 1) if orig_size > 0 else 0
+            }
+    except Exception as opt_err:
+        print(f"[POSTER] Image optimization failed: {opt_err}")
+        # Continue with unoptimized image
+    
     # Return a relative URL path; static serving should mount this directory at /static
-    return JSONResponse({"url": f"/static/{name}"})
+    response = {"url": f"/static/{name}"}
+    if optimization_info:
+        response["optimization"] = optimization_info
+    return JSONResponse(response)
 
 
 @router.post("/poster/by-url")
@@ -545,9 +569,18 @@ async def upload_video(
 async def upload_program_images(
     files: list[UploadFile] = File(...),
     program_id: Optional[int] = Form(None),
+    optimize: bool = Form(True),  # Enable optimization by default
+    image_type: str = Form("banner"),  # Type for optimization config
     session: AsyncSession = Depends(get_session),
 ):
     import gc
+    
+    # Import image optimizer
+    try:
+        from ..utils.image_optimizer import optimize_image, PILLOW_AVAILABLE
+    except ImportError:
+        PILLOW_AVAILABLE = False
+        logging.warning("Image optimizer not available")
     
     # Limit number of files to prevent memory exhaustion
     MAX_FILES = 10
@@ -567,6 +600,7 @@ async def upload_program_images(
 
     saved_paths: list[str] = []
     errors: list[str] = []
+    optimization_stats: list[dict] = []
     
     for idx, f in enumerate(files):
         try:
@@ -600,8 +634,35 @@ async def upload_program_images(
                         break
                     out_file.write(chunk)
             
+            # Optimize image if enabled and Pillow is available
+            final_path = dest
+            original_size = total_size
+            optimized_size = total_size
+            
+            if optimize and PILLOW_AVAILABLE and dest.exists() and dest.stat().st_size > 0:
+                try:
+                    optimized_path, orig_sz, opt_sz = optimize_image(
+                        dest, 
+                        image_type=image_type,
+                        keep_original=False
+                    )
+                    final_path = Path(optimized_path)
+                    original_size = orig_sz
+                    optimized_size = opt_sz
+                    # Update name to reflect new extension if changed
+                    name = final_path.name
+                    optimization_stats.append({
+                        "file": f.filename,
+                        "original_kb": round(original_size / 1024, 1),
+                        "optimized_kb": round(optimized_size / 1024, 1),
+                        "reduction_pct": round((1 - optimized_size / original_size) * 100, 1) if original_size > 0 else 0
+                    })
+                except Exception as opt_err:
+                    logging.error(f"Image optimization failed for {name}: {opt_err}")
+                    # Continue with unoptimized image
+            
             # If file was successfully written, add to saved paths
-            if dest.exists() and dest.stat().st_size > 0:
+            if final_path.exists() and final_path.stat().st_size > 0:
                 # Return path relative to static mount (uploads directory)
                 # The static mount serves files from UPLOAD_DIR at /static/
                 rel_path = f"program-images/{name}"
@@ -669,5 +730,11 @@ async def upload_program_images(
     response = {"files": saved_paths, "program_id": program_id}
     if errors:
         response["warnings"] = errors
+    if optimization_stats:
+        response["optimization"] = optimization_stats
+        total_orig = sum(s["original_kb"] for s in optimization_stats)
+        total_opt = sum(s["optimized_kb"] for s in optimization_stats)
+        response["total_savings_kb"] = round(total_orig - total_opt, 1)
+        response["total_reduction_pct"] = round((1 - total_opt / total_orig) * 100, 1) if total_orig > 0 else 0
     
     return response

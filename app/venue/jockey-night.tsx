@@ -396,7 +396,7 @@ export default function JockeyNightPage() {
         Alert.alert('Permission', 'We need access to your photos to upload a banner.');
         return;
       }
-      const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 0.8 });
+      const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.8 });
       if (!res.canceled && res.assets && res.assets.length > 0) {
         setBannerImages(prev => ({
           ...prev,
@@ -477,45 +477,14 @@ export default function JockeyNightPage() {
           </View>
           <ThemedText style={styles.subtitle}>Customize your night with add-ons and decorations</ThemedText>
           
-          {/* Top Banner Images - Carousel/Slider */}
-          {topBanners.length > 0 && (
-            <View style={[styles.topBannerContainer, { maxWidth: screenWidth - 32 }]}>
-              <ScrollView 
-                horizontal 
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.topBannerScroll}
-                pagingEnabled
-              >
-                {topBanners.map((bannerUrl, index) => {
-                  const fullUrl = getImageUrl(bannerUrl);
-                  if (!fullUrl) return null;
-                  return (
-                    <View key={index} style={[styles.topBannerItem, { 
-                      width: Math.min(screenWidth - 32, 600),
-                      maxWidth: '100%'
-                    }]}>
-                      <RNImage
-                        source={{ uri: fullUrl }}
-                        style={styles.topBannerImage}
-                        resizeMode="cover"
-                      />
-                    </View>
-                  );
-                })}
-              </ScrollView>
-            </View>
-          )}
-          
-          {/* Event image below subtitle (fallback if no top banners) */}
-          {topBanners.length === 0 && (
-            <View style={styles.hallImageCard}>
-              <RNImage
-                source={require('@/assets/images/jockeynight.jpg')}
-                style={styles.hallImage}
-                resizeMode="cover"
-              />
-            </View>
-          )}
+          {/* Event Banner Image - Static */}
+          <View style={styles.hallImageCard}>
+            <RNImage
+              source={require('@/assets/images/jockeynight.jpg')}
+              style={styles.hallImage}
+              resizeMode="cover"
+            />
+          </View>
         </View>
 
         {/* Highlights */}
@@ -591,23 +560,6 @@ export default function JockeyNightPage() {
             hourlyRate={spaceData?.price_per_hour ?? HOURLY_RATE}
             durationOverrides={(spaceData as any)?.pricing_overrides?.duration ?? (spaceData as any)?.pricing_overrides?.hour}
           />
-          {/* Guests selector */}
-          <View style={{ flexDirection: 'row', gap: 10, marginTop: 10 }}>
-            <View style={styles.counterBox}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                <Ionicons name="people-outline" size={16} color="#065F46" />
-                <ThemedText style={styles.counterLabel}>Guests</ThemedText>
-              </View>
-              <View style={styles.counterRow}>
-                {/* Transportation Section - removed for Jockey Night */}
-                {false && (
-                  <View style={styles.card}>
-                    {/* Transport UI removed */}
-                  </View>
-                )}
-              </View>
-            </View>
-          </View>
 
           {/* Transport Cost Display - removed for Jockey Night */}
 

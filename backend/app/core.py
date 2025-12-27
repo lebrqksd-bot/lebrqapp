@@ -358,11 +358,14 @@ def create_app() -> FastAPI:
     from app.routers import (
         qr_attendance,  # HR: QR Code Attendance System
         office,  # HR: Office Location Management
+        event_definitions,  # NEW: Event ticketing - master definitions
+        event_schedules,  # NEW: Event ticketing - schedules
     )
     from .auth import hash_password
     from .models import User
     from .models_rack import Rack, RackProduct, RackOrder  # Import rack models for SQLAlchemy registration
     from .models_booking_guests import BookingGuest  # Import booking guests model
+    from .models_events import EventDefinition, EventSchedule, TicketType  # Import event ticketing models
     from .middleware.error_handler import register_error_handlers
     
     # Register global error handlers for standardized responses
@@ -418,6 +421,9 @@ def create_app() -> FastAPI:
     app.include_router(payroll.router, prefix=settings.API_PREFIX)  # HR: Payroll management
     app.include_router(hr_dashboard.router, prefix=settings.API_PREFIX)  # HR: Dashboard statistics
     app.include_router(office.router, prefix=settings.API_PREFIX)  # HR: Office Location Management
+    # NEW: Event Ticketing System
+    app.include_router(event_definitions.router, prefix=f"{settings.API_PREFIX}/event-definitions", tags=["Event Definitions"])
+    app.include_router(event_schedules.router, prefix=f"{settings.API_PREFIX}/event-schedules", tags=["Event Schedules"])
     from app.routers import item_media
     app.include_router(item_media.router, prefix=settings.API_PREFIX)  # Item media (images/videos)
     app.include_router(public_bookings.router, prefix=settings.API_PREFIX)

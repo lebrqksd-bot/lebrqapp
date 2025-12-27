@@ -178,7 +178,7 @@ export default function AdminRacks() {
   const handlePickImage = async (forProduct: boolean = false, isVideo: boolean = false, index?: number) => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: isVideo ? ImagePicker.MediaTypeOptions.Videos : ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: isVideo ? ['videos'] : ['images'],
         allowsEditing: !isVideo,
         aspect: isVideo ? undefined : [4, 3],
         quality: 0.8,

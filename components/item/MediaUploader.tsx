@@ -71,7 +71,7 @@ export default function MediaUploader({
       }
 
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ['images'],
         allowsMultipleSelection: multiple,
         quality: 0.8,
         allowsEditing: false,
@@ -117,7 +117,7 @@ export default function MediaUploader({
       }
 
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        mediaTypes: ['videos'],
         allowsMultipleSelection: multiple,
         quality: 1,
         videoMaxDuration: 300, // 5 minutes max

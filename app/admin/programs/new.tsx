@@ -73,7 +73,7 @@ export default function NewProgram() {
       <View style={styles.body}>
         {!!posterUrl && <ThemedText style={{marginBottom:8}}>Poster set: {posterUrl}</ThemedText>}
         <TouchableOpacity style={styles.secondaryBtn} onPress={async ()=>{
-          const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 0.8 });
+          const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.8 });
           if (!res.canceled && res.assets.length) {
             const a = res.assets[0];
             const form = new FormData();

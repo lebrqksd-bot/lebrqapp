@@ -169,6 +169,29 @@ async def upload_item_media(
                 file_path.unlink()
             raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
         
+        # Optimize images (not videos)
+        optimization_info = None
+        if media_type == "image":
+            try:
+                from ..utils.image_optimizer import optimize_image, PILLOW_AVAILABLE
+                if PILLOW_AVAILABLE:
+                    optimized_path, orig_size, opt_size = optimize_image(
+                        str(file_path),
+                        image_type="thumbnail",
+                        keep_original=False
+                    )
+                    # Update filename if extension changed
+                    unique_name = os.path.basename(optimized_path)
+                    file_path = Path(optimized_path)
+                    optimization_info = {
+                        "original_kb": round(orig_size / 1024, 1),
+                        "optimized_kb": round(opt_size / 1024, 1),
+                        "reduction_pct": round((1 - opt_size / orig_size) * 100, 1) if orig_size > 0 else 0
+                    }
+            except Exception as opt_err:
+                print(f"[ITEM_MEDIA] Image optimization failed: {opt_err}")
+                # Continue with unoptimized image
+        
         # Relative path for database
         rel_path = f"item-media/{unique_name}"
         file_url = f"/static/{rel_path}"

@@ -15,6 +15,7 @@ interface TimeSlotSelectorProps {
   onDurationChange: (duration: number) => void;
   compact?: boolean; // removes container padding/background when true
   hideTitle?: boolean; // hide the "Date & Time Selection" header when true
+  hideLabels?: boolean; // hide all section labels ("Select Date", "Select Time", etc.)
   hideTimeAndDuration?: boolean; // hide time and duration selectors (for yoga/zumba - date only)
   // Pricing visuals
   hourlyRate?: number; // base hourly rate for showing base price on duration buttons
@@ -41,6 +42,7 @@ export default function TimeSlotSelector({
   onDurationChange,
   compact = false,
   hideTitle = false,
+  hideLabels = false,
   hideTimeAndDuration = false,
   hourlyRate,
   durationOverrides,
@@ -547,8 +549,8 @@ export default function TimeSlotSelector({
       )}
       
       {/* Date Selection */}
-      <View style={styles.inputGroup}>
-        <ThemedText style={styles.label}>Select Date</ThemedText>
+      <View style={[styles.inputGroup, hideTimeAndDuration && { marginBottom: 0 }]}>
+        {!hideLabels && <ThemedText style={styles.label}>Select Date</ThemedText>}
         {Platform.OS === 'web' ? (
           <input
             type="date"

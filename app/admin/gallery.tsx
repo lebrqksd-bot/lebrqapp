@@ -105,23 +105,13 @@ export default function AdminGallery() {
         return;
       }
 
-      // Build options safely
+      // Build options safely - use new MediaType API (supports both images and videos)
       const pickerOptions: ImagePicker.ImagePickerOptions = {
         allowsMultipleSelection: false,
         quality: 1,
         videoMaxDuration: 300, // 5 minutes max for videos
+        mediaTypes: ['images', 'videos'], // New API: array of media types
       };
-
-      // Set mediaTypes - All allows both images and videos
-      if (ImagePicker.MediaTypeOptions) {
-        // Use All if available, which supports both images and videos
-        if ('All' in ImagePicker.MediaTypeOptions) {
-          pickerOptions.mediaTypes = (ImagePicker.MediaTypeOptions as any).All;
-        } else {
-          // Fallback: default to Images if All is not available
-          pickerOptions.mediaTypes = ImagePicker.MediaTypeOptions.Images;
-        }
-      }
 
       const result = await ImagePicker.launchImageLibraryAsync(pickerOptions);
 

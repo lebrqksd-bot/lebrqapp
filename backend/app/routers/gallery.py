@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status, Request
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import IntegrityError
 from pydantic import BaseModel
 from typing import Optional
 import os
 import shutil
+import uuid
 from datetime import datetime
 from typing import List
 
@@ -75,7 +77,13 @@ async def upload_gallery_image(
     session: AsyncSession = Depends(get_session),
     _user = Depends(require_role("admin"))
 ):
-    """Upload a new gallery image or video (admin only)"""
+    """Upload a new gallery image or video (admin only) with automatic image optimization"""
+    # Import image optimizer
+    try:
+        from ..utils.image_optimizer import optimize_image, PILLOW_AVAILABLE
+    except ImportError:
+        PILLOW_AVAILABLE = False
+    
     # Validate file type - both images and videos allowed
     allowed_image_extensions = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
     allowed_video_extensions = {".mp4", ".mov", ".avi", ".webm", ".mpeg", ".mpg"}
@@ -94,9 +102,10 @@ async def upload_gallery_image(
             detail=f"Invalid file type. Allowed formats: Images: {', '.join(allowed_image_extensions)}, Videos: {', '.join(allowed_video_extensions)}"
         )
     
-    # Generate unique filename
+    # Generate unique filename with UUID to avoid conflicts
+    unique_id = uuid.uuid4().hex[:12]
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    unique_filename = f"gallery_{timestamp}{file_ext}"
+    unique_filename = f"gallery_{timestamp}_{unique_id}{file_ext}"
     abs_path = os.path.join(UPLOAD_DIR, unique_filename)
     
     # Save file
@@ -109,26 +118,78 @@ async def upload_gallery_image(
             detail=f"Failed to save file: {str(e)}"
         )
     
-    # Create database entry
-    rel_path = f"gallery/{unique_filename}"
-    new_image = GalleryImage(
-        filename=unique_filename, 
-        filepath=rel_path, 
-        media_type=media_type,
-        title=None, 
-        description=None
-    )
-    session.add(new_image)
-    await session.commit()
-    await session.refresh(new_image)
+    # Optimize images (not videos)
+    optimization_info = None
+    if media_type == "image" and PILLOW_AVAILABLE:
+        try:
+            optimized_path, orig_size, opt_size = optimize_image(
+                abs_path,
+                image_type="gallery",
+                keep_original=False
+            )
+            # Update filename if extension changed (e.g., jpg -> webp)
+            unique_filename = os.path.basename(optimized_path)
+            abs_path = optimized_path
+            optimization_info = {
+                "original_kb": round(orig_size / 1024, 1),
+                "optimized_kb": round(opt_size / 1024, 1),
+                "reduction_pct": round((1 - opt_size / orig_size) * 100, 1) if orig_size > 0 else 0
+            }
+        except Exception as opt_err:
+            print(f"[GALLERY] Image optimization failed: {opt_err}")
+            # Continue with unoptimized image
     
-    return {
+    # Create database entry with retry on constraint violation
+    rel_path = f"gallery/{unique_filename}"
+    max_retries = 3
+    last_error = None
+    
+    for attempt in range(max_retries):
+        try:
+            new_image = GalleryImage(
+                filename=unique_filename, 
+                filepath=rel_path, 
+                media_type=media_type,
+                title=None, 
+                description=None
+            )
+            session.add(new_image)
+            await session.commit()
+            await session.refresh(new_image)
+            break
+        except IntegrityError as e:
+            await session.rollback()
+            last_error = e
+            # Generate new unique filename for retry
+            unique_id = uuid.uuid4().hex[:12]
+            unique_filename = f"gallery_{timestamp}_{unique_id}{file_ext}"
+            rel_path = f"gallery/{unique_filename}"
+            # Rename the file on disk
+            new_abs_path = os.path.join(UPLOAD_DIR, unique_filename)
+            try:
+                os.rename(abs_path, new_abs_path)
+                abs_path = new_abs_path
+            except Exception:
+                pass
+            print(f"[GALLERY] Retry {attempt + 1} after IntegrityError: {e}")
+            if attempt == max_retries - 1:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail=f"Failed to save gallery entry after {max_retries} attempts"
+                )
+    
+    response = {
         "message": f"{media_type.capitalize()} uploaded successfully",
         "id": new_image.id,
         "filename": new_image.filename,
         "media_type": new_image.media_type,
         "url": f"/static/{rel_path}"
     }
+    
+    if optimization_info:
+        response["optimization"] = optimization_info
+    
+    return response
 
 
 @router.patch("/{image_id}")

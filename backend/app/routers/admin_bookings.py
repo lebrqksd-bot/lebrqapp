@@ -31,22 +31,25 @@ async def get_auto_approve_from_db(session: AsyncSession) -> bool:
         if row:
             return row[0] == 'true' or row[0] == '1'
     except Exception as e:
-        # Table might not exist, create it
+        # Table might not exist, create it (PostgreSQL compatible)
         try:
             await session.execute(
                 text("""
                     CREATE TABLE IF NOT EXISTS admin_settings (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        id SERIAL PRIMARY KEY,
                         setting_key VARCHAR(100) UNIQUE NOT NULL,
                         value TEXT,
-                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
                 """)
             )
             await session.commit()
-            # Insert default value
+            # Insert default value (PostgreSQL UPSERT syntax)
             await session.execute(
-                text("INSERT INTO admin_settings (setting_key, value) VALUES ('auto_approve_enabled', 'false') ON DUPLICATE KEY UPDATE value = value")
+                text("""
+                    INSERT INTO admin_settings (setting_key, value) VALUES ('auto_approve_enabled', 'false')
+                    ON CONFLICT (setting_key) DO NOTHING
+                """)
             )
             await session.commit()
         except Exception as create_error:
@@ -57,11 +60,12 @@ async def set_auto_approve_in_db(session: AsyncSession, enabled: bool) -> bool:
     """Save auto-approve setting to database"""
     try:
         from sqlalchemy import text
+        # PostgreSQL UPSERT syntax
         await session.execute(
             text("""
                 INSERT INTO admin_settings (setting_key, value) 
                 VALUES ('auto_approve_enabled', :value)
-                ON DUPLICATE KEY UPDATE value = :value, updated_at = CURRENT_TIMESTAMP
+                ON CONFLICT (setting_key) DO UPDATE SET value = :value, updated_at = CURRENT_TIMESTAMP
             """),
             {"value": "true" if enabled else "false"}
         )
@@ -86,22 +90,25 @@ async def get_refund_percentage_from_db(session: AsyncSession) -> float:
             except (ValueError, TypeError):
                 return 40.0
     except Exception as e:
-        # Table might not exist, create it and set default
+        # Table might not exist, create it and set default (PostgreSQL compatible)
         try:
             await session.execute(
                 text("""
                     CREATE TABLE IF NOT EXISTS admin_settings (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        id SERIAL PRIMARY KEY,
                         setting_key VARCHAR(100) UNIQUE NOT NULL,
                         value TEXT,
-                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
                 """)
             )
             await session.commit()
-            # Insert default value
+            # Insert default value (PostgreSQL UPSERT syntax)
             await session.execute(
-                text("INSERT INTO admin_settings (setting_key, value) VALUES ('refund_percentage', '40.0') ON DUPLICATE KEY UPDATE value = value")
+                text("""
+                    INSERT INTO admin_settings (setting_key, value) VALUES ('refund_percentage', '40.0')
+                    ON CONFLICT (setting_key) DO NOTHING
+                """)
             )
             await session.commit()
         except Exception as create_error:
@@ -115,11 +122,12 @@ async def set_refund_percentage_in_db(session: AsyncSession, percentage: float) 
         # Validate percentage (0-100)
         if percentage < 0 or percentage > 100:
             raise ValueError("Refund percentage must be between 0 and 100")
+        # PostgreSQL UPSERT syntax
         await session.execute(
             text("""
                 INSERT INTO admin_settings (setting_key, value) 
                 VALUES ('refund_percentage', :value)
-                ON DUPLICATE KEY UPDATE value = :value, updated_at = CURRENT_TIMESTAMP
+                ON CONFLICT (setting_key) DO UPDATE SET value = :value, updated_at = CURRENT_TIMESTAMP
             """),
             {"value": str(percentage)}
         )

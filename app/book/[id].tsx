@@ -1,4 +1,4 @@
-import AddonsSection from '@/components/AddonsSection';
+﻿import AddonsSection from '@/components/AddonsSection';
 import AuthModal from '@/components/AuthModal';
 import OfferPopup from '@/components/OfferPopup';
 import { TicketDetails } from '@/components/TicketCard';
@@ -45,24 +45,24 @@ const BOOKING_DATA: Record<string, BookingData> = {
     ratingCount: 28,
     images: [require('@/assets/images/yoga.jpg')],
     description:
-      '🧘‍♀️ Rejuvenate your mind and body in a peaceful, fully equipped yoga space designed for comfort and focus.',
+      'ðŸ§˜â€â™€ï¸ Rejuvenate your mind and body in a peaceful, fully equipped yoga space designed for comfort and focus.',
     features: [
-      '🧑‍🏫 Certified Yoga Trainer',
-      '🧑‍🏫 Guided sessions for beginners and advanced practitioners',
-      '🧑‍🏫 Personalized correction and alignment support',
-      '🧘‍♂️ Yoga Mats Provided (Clean & Sanitized Daily)',
-      '🧘‍♂️ Fully Air-Conditioned Hall with Coolers',
-      '🧘‍♂️ Fresh Drinking Water – Hot, Cold & Warm',
-      '🧘‍♂️ Locker Facility for safe storage',
-      '🧘‍♂️ Dress Changing Room and clean washroom',
-      '🌿 Calm, peaceful atmosphere with soothing music',
-      '🌿 Spacious hall with natural lighting',
-      '🌿 Aromatherapy and relaxation setup during meditation',
-      '🚗 Ample Parking Space',
-      '🚗 Easily reachable location',
-      '✨ Meditation & Pranayama Sessions',
-      '✨ Nutrition and Wellness Guidance',
-      '✨ Weekend Refresh & Detox Programs',
+      'ðŸ§‘â€ðŸ« Certified Yoga Trainer',
+      'ðŸ§‘â€ðŸ« Guided sessions for beginners and advanced practitioners',
+      'ðŸ§‘â€ðŸ« Personalized correction and alignment support',
+      'ðŸ§˜â€â™‚ï¸ Yoga Mats Provided (Clean & Sanitized Daily)',
+      'ðŸ§˜â€â™‚ï¸ Fully Air-Conditioned Hall with Coolers',
+      'ðŸ§˜â€â™‚ï¸ Fresh Drinking Water â€“ Hot, Cold & Warm',
+      'ðŸ§˜â€â™‚ï¸ Locker Facility for safe storage',
+      'ðŸ§˜â€â™‚ï¸ Dress Changing Room and clean washroom',
+      'ðŸŒ¿ Calm, peaceful atmosphere with soothing music',
+      'ðŸŒ¿ Spacious hall with natural lighting',
+      'ðŸŒ¿ Aromatherapy and relaxation setup during meditation',
+      'ðŸš— Ample Parking Space',
+      'ðŸš— Easily reachable location',
+      'âœ¨ Meditation & Pranayama Sessions',
+      'âœ¨ Nutrition and Wellness Guidance',
+      'âœ¨ Weekend Refresh & Detox Programs',
     ],
     policies: [
       'General Participation: Participation is voluntary. Attendees confirm they are physically and mentally fit. Those with health issues (heart disease, high blood pressure, injuries, chronic ailments) must consult a physician and inform the instructor in advance',
@@ -70,7 +70,7 @@ const BOOKING_DATA: Record<string, BookingData> = {
       'Attendance & Rescheduling: Arrive at least 10 minutes before class. Late entry beyond 10 minutes may not be permitted. Missed sessions due to personal reasons cannot be rescheduled or refunded',
       'Dress Code & Equipment: Wear comfortable yoga attire suitable for stretching. Yoga mats are provided and sanitized after each session. Participants may bring their own mats. Remove sports shoes or slippers before entering the yoga area',
       'Safety & Conduct: Follow instructor guidance and safety instructions at all times. Avoid attempting advanced postures without supervision. Disruptive behavior may lead to membership termination without refund. Respect fellow participants and maintain silence',
-      'Health, Hygiene & Hydration: Stay hydrated — purified water (Hot, Cold & Warm) is provided. Maintain personal hygiene with clean yoga attire. Anyone feeling unwell or injured should avoid attending until fully recovered',
+      'Health, Hygiene & Hydration: Stay hydrated â€” purified water (Hot, Cold & Warm) is provided. Maintain personal hygiene with clean yoga attire. Anyone feeling unwell or injured should avoid attending until fully recovered',
       'Privacy & Media Consent: Photography or videos may be taken for promotional purposes. By joining, participants consent to use of images unless a written exclusion request is submitted. All information is handled with data privacy and confidentiality',
       'Facility Usage: Fully air-conditioned hall with coolers. Amenities include Mats, Locker Facility, Hot/Cold/Warm Water, Changing Room, and Ample Parking. Use all amenities responsibly and report damages immediately',
       'Refunds & Cancellation: No refunds for no-show or mid-term withdrawal. Medical emergencies may allow transfer to a later batch at studio discretion. If classes are permanently discontinued, proportionate refunds will be issued',
@@ -90,23 +90,23 @@ const BOOKING_DATA: Record<string, BookingData> = {
     ratingCount: 11,
     images: [require('@/assets/images/zumbavideo.mp4')],
     description:
-      '🩰 Experience energetic fitness sessions with top-class facilities and certified trainers! Dance, sweat, and have fun in our high-energy Zumba class designed for all fitness levels.',
+      'ðŸ©° Experience energetic fitness sessions with top-class facilities and certified trainers! Dance, sweat, and have fun in our high-energy Zumba class designed for all fitness levels.',
     features: [
-      '🏋️‍♀️ Zumba Certified Coach',
-      '🏋️‍♀️ Personalized attention for all levels',
-      '🏋️‍♀️ Fun-filled, result-oriented routines',
-      '🔊 2000 Watts Professional Sound System',
-      '🔊 Fully Air-Conditioned Hall with Coolers',
-      '🔊 Spacious, well-ventilated dance area',
-      '💧 Drinking Water – Hot, Cold & Warm',
-      '💧 Separate Dress Changing Room',
-      '💧 Clean and hygienic washroom facilities',
-      '🚗 Ample Parking Space',
-      '🚗 Easy Access Location',
-      '🌟 Safe and secure environment',
-      '🌟 Ladies-only and mixed batches available',
-      '🌟 Weekend and early-morning batches',
-      '🌟 LED-lit dance floor',
+      'ðŸ‹ï¸â€â™€ï¸ Zumba Certified Coach',
+      'ðŸ‹ï¸â€â™€ï¸ Personalized attention for all levels',
+      'ðŸ‹ï¸â€â™€ï¸ Fun-filled, result-oriented routines',
+      'ðŸ”Š 2000 Watts Professional Sound System',
+      'ðŸ”Š Fully Air-Conditioned Hall with Coolers',
+      'ðŸ”Š Spacious, well-ventilated dance area',
+      'ðŸ’§ Drinking Water â€“ Hot, Cold & Warm',
+      'ðŸ’§ Separate Dress Changing Room',
+      'ðŸ’§ Clean and hygienic washroom facilities',
+      'ðŸš— Ample Parking Space',
+      'ðŸš— Easy Access Location',
+      'ðŸŒŸ Safe and secure environment',
+      'ðŸŒŸ Ladies-only and mixed batches available',
+      'ðŸŒŸ Weekend and early-morning batches',
+      'ðŸŒŸ LED-lit dance floor',
     ],
     policies: [
       'Participation & Fitness Declaration: All participants must be in good physical health and inform the instructor of any pre-existing medical conditions, injuries, or physical limitations before joining. Participation is voluntary and individuals are responsible for assessing their own fitness level. Management and instructors are not liable for injuries or health issues',
@@ -253,10 +253,10 @@ export default function BookingPage() {
               }
             }
             
-            // Extract ticket price from customer_note (format: "Tickets: 100 @ ₹199 | ...")
+            // Extract ticket price from customer_note (format: "Tickets: 100 @ â‚¹199 | ...")
             let ticketPrice = 450; // default
             if (b.customer_note) {
-              const priceMatch = b.customer_note.match(/@\s*₹?(\d+)/);
+              const priceMatch = b.customer_note.match(/@\s*â‚¹?(\d+)/);
               if (priceMatch) {
                 ticketPrice = parseInt(priceMatch[1], 10);
               }
@@ -343,6 +343,18 @@ export default function BookingPage() {
     setAppliedOffer(null);
   }, [periodType, selectedDate]);
 
+  // Show loading placeholder when id is not yet populated (route params resolving)
+  if (!id) {
+    return (
+      <ThemedView style={styles.container}>
+        <View style={{ flex: 1, padding: 16, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color="#10B981" />
+          <ThemedText style={{ marginTop: 8, fontWeight: '600', color: '#6b7280' }}>Loadingâ€¦</ThemedText>
+        </View>
+      </ThemedView>
+    );
+  }
+
   // Show loading placeholder for numeric (dynamic) ids until data arrives
   if (isNumericId && !dynamicData) {
     return (
@@ -350,7 +362,7 @@ export default function BookingPage() {
         <View style={{ padding: 16, alignItems: 'center', justifyContent: 'center' }}>
           <>
             <ActivityIndicator size="large" color="#10B981" />
-            <ThemedText style={{ marginTop: 8, fontWeight: '600', color: '#6b7280' }}>Loading…</ThemedText>
+            <ThemedText style={{ marginTop: 8, fontWeight: '600', color: '#6b7280' }}>Loadingâ€¦</ThemedText>
           </>
         </View>
       </ThemedView>
@@ -475,10 +487,10 @@ export default function BookingPage() {
         offer_discount: offerDiscount,
         applied_offer: appliedOffer,
         special_requests: isLive
-          ? `Tickets: ${ticketQty} @ ₹${unitPrice}${offerDiscount > 0 ? ` (with ₹${offerDiscount} offer discount)` : ''}${(addonsTotal||0)>0 ? ` | Add-ons: ₹${Math.round(addonsTotal||0)}` : ''}`
+          ? `Tickets: ${ticketQty} @ â‚¹${unitPrice}${offerDiscount > 0 ? ` (with â‚¹${offerDiscount} offer discount)` : ''}${(addonsTotal||0)>0 ? ` | Add-ons: â‚¹${Math.round(addonsTotal||0)}` : ''}`
           : periodType === 'day' 
-            ? `Date: ${formatDate(selectedDate)}, Period: Day x ${ticketQty} @ ₹${unitPrice}${offerDiscount > 0 ? ` (with ₹${offerDiscount} offer discount)` : ''}${(addonsTotal||0)>0 ? ` | Add-ons: ₹${Math.round(addonsTotal||0)}` : ''}`
-            : `Period: ${ticketQty} Month(s) @ ₹${unitPrice}${offerDiscount > 0 ? ` (with ₹${offerDiscount} offer discount)` : ''}${(addonsTotal||0)>0 ? ` | Add-ons: ₹${Math.round(addonsTotal||0)}` : ''}`,
+            ? `Date: ${formatDate(selectedDate)}, Period: Day x ${ticketQty} @ â‚¹${unitPrice}${offerDiscount > 0 ? ` (with â‚¹${offerDiscount} offer discount)` : ''}${(addonsTotal||0)>0 ? ` | Add-ons: â‚¹${Math.round(addonsTotal||0)}` : ''}`
+            : `Period: ${ticketQty} Month(s) @ â‚¹${unitPrice}${offerDiscount > 0 ? ` (with â‚¹${offerDiscount} offer discount)` : ''}${(addonsTotal||0)>0 ? ` | Add-ons: â‚¹${Math.round(addonsTotal||0)}` : ''}`,
         booking_type: isLive ? 'live-' : (periodType === 'day' ? 'daily' : 'monthly'),
         guests: ticketQty,
         hall_name: 'Live Show',
@@ -540,14 +552,14 @@ export default function BookingPage() {
 
     // Rich WhatsApp-friendly template (bold, emojis, line breaks)
     const messageLines = [
-      `*🎟️ ${title}*`,
-      venue ? `📍 ${venue}` : undefined,
-      dateLine ? `🗓️ ${dateLine}` : undefined,
+      `*ðŸŽŸï¸ ${title}*`,
+      venue ? `ðŸ“ ${venue}` : undefined,
+      dateLine ? `ðŸ—“ï¸ ${dateLine}` : undefined,
       isLive
-        ? `🎫 ${qtyWord}: ${ticketQty} × ₹${unitPrice.toFixed(0)} = *₹${totalAmount.toFixed(0)}*`
-        : `⌛ ${qtyWord}: ${ticketQty} × ₹${unitPrice.toFixed(0)} per ${rateLabel} = *₹${totalAmount.toFixed(0)}*`,
+        ? `ðŸŽ« ${qtyWord}: ${ticketQty} Ã— â‚¹${unitPrice.toFixed(0)} = *â‚¹${totalAmount.toFixed(0)}*`
+        : `âŒ› ${qtyWord}: ${ticketQty} Ã— â‚¹${unitPrice.toFixed(0)} per ${rateLabel} = *â‚¹${totalAmount.toFixed(0)}*`,
       '',
-      `🔗 Book now: ${webUrl}`,
+      `ðŸ”— Book now: ${webUrl}`,
     ].filter(Boolean);
     const message = messageLines.join('\n');
 
@@ -585,7 +597,12 @@ export default function BookingPage() {
     try {
       const enquiryMessage = `Hello, I have an enquiry about ${shown.title || 'this program'}.`;
       const waEncoded = encodeURIComponent(enquiryMessage);
-      const whatsappNumber = CONTACT_DETAILS.whatsapp.replace(/[^0-9]/g, ''); // Remove non-digits
+      // Use zumba-specific number for zumba pages, otherwise default whatsapp
+      const isZumbaPage = /zumba/i.test(key) || /zumba/i.test(shown.title || '');
+      const whatsappNum = isZumbaPage 
+        ? (CONTACT_DETAILS.zumbaWhatsapp || CONTACT_DETAILS.whatsapp)
+        : CONTACT_DETAILS.whatsapp;
+      const whatsappNumber = whatsappNum.replace(/[^0-9]/g, ''); // Remove non-digits
       const waDeepLink = `whatsapp://send?phone=${whatsappNumber}&text=${waEncoded}`;
       const waWebLink = `https://wa.me/${whatsappNumber}?text=${waEncoded}`;
 
@@ -871,13 +888,23 @@ export default function BookingPage() {
                 ? require('@/assets/images/yoga.jpg')
                 : require('@/assets/images/zumba.png');
               return (
-                <View style={[styles.heroImageContainer, { height: 220 }]}>
+                <View style={[styles.heroImageContainer, { height: 160 }]}>
                   <Image source={imgSrc as any} style={{ width: '100%', height: '100%' }} contentFit="cover" />
                 </View>
               );
             }
             
             const imgSrc = bannerUrl ? { uri: bannerUrl } : (shown.images?.[0] || null);
+            
+            // Live show fallback: use static jockeynight.jpg image when no banner uploaded
+            if (!imgSrc && isLivePreview) {
+              return (
+                <View style={styles.heroImageContainer}>
+                  <Image source={require('@/assets/images/jockeynight.jpg')} style={{ width: '100%', height: '100%' }} contentFit="cover" />
+                </View>
+              );
+            }
+            
             if (imgSrc) {
               // Display image for other events
               return (
@@ -902,7 +929,7 @@ export default function BookingPage() {
             <View style={{ marginTop: 8 }}>
               <View style={styles.priceBadge}>
                 <Ionicons name="cash-outline" size={14} color="#065F46" />
-                <ThemedText style={styles.priceBadgeText}>Ticket ₹{Number(shown?.dayPrice ?? 0).toFixed(0)}</ThemedText>
+                <ThemedText style={styles.priceBadgeText}>Ticket â‚¹{Number(shown?.dayPrice ?? 0).toFixed(0)}</ThemedText>
               </View>
             </View>
           ) : null}
@@ -910,13 +937,13 @@ export default function BookingPage() {
         </View>
 
   {/* Actions */}
-        <View style={{ paddingTop: 10, gap: 10 }}>
+        <View style={{ paddingTop: 6, gap: 6 }}>
           {/* Period selector: show only for non-live bookings */}
           {(shown.booking_type || '').toLowerCase() !== 'live-' ? (
-            <View style={[styles.card, { marginHorizontal: 16, marginTop: 12, paddingHorizontal: 12, paddingVertical: 12 }]}> 
+            <View style={[styles.card, { marginHorizontal: 16, marginTop: 6, paddingHorizontal: 10, paddingVertical: 8 }]}> 
               <ThemedText style={styles.cardTitle}>Choose Billing Period</ThemedText>
-              <View style={{ marginTop: 6 }}>
-                <View style={{ flexDirection: 'row', gap: 10 }}>
+              <View style={{ marginTop: 4 }}>
+                <View style={{ flexDirection: 'row', gap: 8 }}>
                   <TouchableOpacity
                     onPress={() => setPeriodType('day')}
                     style={[styles.pill, periodType === 'day' ? styles.pillActive : undefined]}
@@ -976,8 +1003,8 @@ export default function BookingPage() {
               <View style={{ marginTop: 8 }}>
                 <ThemedText style={{ color: '#6b7280' }}>
                   {periodType === 'day' 
-                    ? `Rate: ₹${Number(shown?.dayPrice ?? 0)} per day`
-                    : `Rate: ₹${Number(shown?.monthPrice ?? 0)} per month`}
+                    ? `Rate: â‚¹${Number(shown?.dayPrice ?? 0)} per day`
+                    : `Rate: â‚¹${Number(shown?.monthPrice ?? 0)} per month`}
                 </ThemedText>
               </View>
             </View>
@@ -1125,36 +1152,196 @@ export default function BookingPage() {
 
         {/* Tickets block moved to Actions above */}
 
-        {/* Features list (two-column) */}
-        <View style={styles.card}>
-          <ThemedText style={styles.cardTitle}>What’s included</ThemedText>
-          <View style={styles.featuresGrid}>
-            {(shown.features || []).map((f: string, idx: number) => (
-              <View key={idx} style={styles.featureRow}>
-                <View style={styles.bullet} />
-                <ThemedText style={styles.featureText} numberOfLines={1} ellipsizeMode="tail">{f}</ThemedText>
-              </View>
-            ))}
-          </View>
-        </View>
-
-        {/* Policies */}
-        <View style={styles.card}>
-          <ThemedText style={styles.cardTitle}>Terms & Policies</ThemedText>
-          <View style={{ gap: 2 }}>
-            {(shown.policies || []).map((p: string, idx: number) => {
-              const romans = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi', 'xii'];
-              const numeral = romans[idx] || `${idx + 1}`;
-              return (
-                <View key={idx} style={styles.policyRow}>
-                  <ThemedText style={styles.policyBullet}>{numeral}.</ThemedText>
-                  <ThemedText style={styles.policyText}>{p}</ThemedText>
+        {/* Features list (two-column) - Hidden for live shows */}
+        {!isLivePreview && (
+          <View style={styles.card}>
+            <ThemedText style={styles.cardTitle}>What's included</ThemedText>
+            <View style={styles.featuresGrid}>
+              {(shown.features || []).map((f: string, idx: number) => (
+                <View key={idx} style={styles.featureRow}>
+                  <View style={styles.bullet} />
+                  <ThemedText style={styles.featureText} numberOfLines={1} ellipsizeMode="tail">{f}</ThemedText>
                 </View>
-              );
-            })}
+              ))}
+            </View>
           </View>
-          {/* Optional Equipment container removed as requested */}
-        </View>
+        )}
+
+        {/* Policies - Hidden for live shows */}
+        {!isLivePreview && (
+          <View style={styles.card}>
+            <ThemedText style={styles.cardTitle}>Terms & Policies</ThemedText>
+            <View style={{ gap: 2 }}>
+              {(shown.policies || []).map((p: string, idx: number) => {
+                const romans = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x', 'xi', 'xii'];
+                const numeral = romans[idx] || `${idx + 1}`;
+                return (
+                  <View key={idx} style={styles.policyRow}>
+                    <ThemedText style={styles.policyBullet}>{numeral}.</ThemedText>
+                    <ThemedText style={styles.policyText}>{p}</ThemedText>
+                  </View>
+                );
+              })}
+            </View>
+            {/* Optional Equipment container removed as requested */}
+          </View>
+        )}
+
+        {/* Live Show: What's Included & Terms - Modern Design */}
+        {isLivePreview && (
+          <>
+            {/* What's Included â€“ Experience - Modern Design */}
+            <View style={[styles.card, { marginTop: 16 }]}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: '#ECFDF5', alignItems: 'center', justifyContent: 'center' }}>
+                  <Ionicons name="checkmark-circle" size={20} color="#10B981" />
+                </View>
+                <ThemedText style={{ fontSize: 16, fontWeight: '700', color: '#111827' }}>What's Included</ThemedText>
+              </View>
+              <ThemedText style={{ color: '#6B7280', marginBottom: 16, lineHeight: 20 }}>Enjoy a mesmerizing evening of music, rhythm, and entertainment â€” with comfort, quality, and convenience assured!</ThemedText>
+
+              {/* Event Highlights */}
+              <View style={{ marginBottom: 16 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                  <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: '#FEF3C7', alignItems: 'center', justifyContent: 'center' }}>
+                    <Ionicons name="star" size={14} color="#F59E0B" />
+                  </View>
+                  <ThemedText style={{ fontWeight: '600', color: '#111827' }}>Event Highlights</ThemedText>
+                </View>
+                <View style={{ gap: 8, paddingLeft: 36 }}>
+                  {[
+                    { icon: 'musical-notes', color: '#8B5CF6', text: 'Live Musical Performance by Professional Artists' },
+                    { icon: 'volume-high', color: '#3B82F6', text: 'High-Quality Sound System for immersive experience' },
+                    { icon: 'flash', color: '#F59E0B', text: 'Dynamic Lighting & Stage Effects' },
+                    { icon: 'people', color: '#10B981', text: 'Seating Arrangements for ticket holders' },
+                  ].map((item, idx) => (
+                    <View key={idx} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+                      <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: `${item.color}15`, alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
+                        <Ionicons name={item.icon as any} size={12} color={item.color} />
+                      </View>
+                      <ThemedText style={{ flex: 1, color: '#374151', lineHeight: 20 }}>{item.text}</ThemedText>
+                    </View>
+                  ))}
+                </View>
+              </View>
+
+              {/* Venue & Comfort */}
+              <View style={{ marginBottom: 16 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                  <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: '#DBEAFE', alignItems: 'center', justifyContent: 'center' }}>
+                    <Ionicons name="home" size={14} color="#3B82F6" />
+                  </View>
+                  <ThemedText style={{ fontWeight: '600', color: '#111827' }}>Venue & Comfort</ThemedText>
+                </View>
+                <View style={{ gap: 8, paddingLeft: 36 }}>
+                  {[
+                    { icon: 'snow', color: '#06B6D4', text: 'Fully Air-Conditioned Hall with Coolers' },
+                    { icon: 'bed', color: '#8B5CF6', text: 'Comfortable Seating with clear sound and visibility' },
+                    { icon: 'water', color: '#3B82F6', text: 'Fresh Drinking Water â€“ Hot, Cold & Warm available' },
+                    { icon: 'sparkles', color: '#10B981', text: 'Clean & Hygienic Washrooms for guests' },
+                  ].map((item, idx) => (
+                    <View key={idx} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+                      <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: `${item.color}15`, alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
+                        <Ionicons name={item.icon as any} size={12} color={item.color} />
+                      </View>
+                      <ThemedText style={{ flex: 1, color: '#374151', lineHeight: 20 }}>{item.text}</ThemedText>
+                    </View>
+                  ))}
+                </View>
+              </View>
+
+              {/* Convenience & Safety */}
+              <View style={{ marginBottom: 16 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                  <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: '#FEE2E2', alignItems: 'center', justifyContent: 'center' }}>
+                    <Ionicons name="shield-checkmark" size={14} color="#EF4444" />
+                  </View>
+                  <ThemedText style={{ fontWeight: '600', color: '#111827' }}>Convenience & Safety</ThemedText>
+                </View>
+                <View style={{ gap: 8, paddingLeft: 36 }}>
+                  {[
+                    { icon: 'car', color: '#6366F1', text: 'Ample Parking Facility' },
+                    { icon: 'enter', color: '#10B981', text: 'Dedicated Entry & Exit Gates for crowd management' },
+                    { icon: 'shield', color: '#EF4444', text: 'Trained Security & Staff Support' },
+                  ].map((item, idx) => (
+                    <View key={idx} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+                      <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: `${item.color}15`, alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
+                        <Ionicons name={item.icon as any} size={12} color={item.color} />
+                      </View>
+                      <ThemedText style={{ flex: 1, color: '#374151', lineHeight: 20 }}>{item.text}</ThemedText>
+                    </View>
+                  ))}
+                </View>
+              </View>
+
+              {/* Ticket Inclusions */}
+              <View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                  <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: '#F3E8FF', alignItems: 'center', justifyContent: 'center' }}>
+                    <Ionicons name="ticket" size={14} color="#8B5CF6" />
+                  </View>
+                  <ThemedText style={{ fontWeight: '600', color: '#111827' }}>Ticket Inclusions</ThemedText>
+                </View>
+                <View style={{ gap: 8, paddingLeft: 36 }}>
+                  {[
+                    { icon: 'musical-note', color: '#8B5CF6', text: 'Entry to Musical Event' },
+                    { icon: 'apps', color: '#3B82F6', text: 'Access to All Basic Facilities (AC Hall, Drinking Water, Parking)' },
+                    { icon: 'grid', color: '#10B981', text: 'Seat Reservation as per Ticket Category' },
+                  ].map((item, idx) => (
+                    <View key={idx} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+                      <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: `${item.color}15`, alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
+                        <Ionicons name={item.icon as any} size={12} color={item.color} />
+                      </View>
+                      <ThemedText style={{ flex: 1, color: '#374151', lineHeight: 20 }}>{item.text}</ThemedText>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            </View>
+
+            {/* Terms & Policies - Modern Design */}
+            <View style={[styles.card, { marginTop: 12, marginBottom: 80 }]}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: '#FEF3C7', alignItems: 'center', justifyContent: 'center' }}>
+                  <Ionicons name="document-text" size={20} color="#F59E0B" />
+                </View>
+                <ThemedText style={{ fontSize: 16, fontWeight: '700', color: '#111827' }}>Terms & Policies</ThemedText>
+              </View>
+
+              <View style={{ gap: 12 }}>
+                {[
+                  { num: '1', title: 'Event Entry & Ticket Policy', content: 'Entry is permitted only with a valid ticket or e-pass. Each ticket admits one person only. Attendees must carry a valid photo ID. Lost tickets cannot be reissued. Re-entry is not permitted once you exit.', color: '#3B82F6' },
+                  { num: '2', title: 'Event Timings & Conduct', content: 'Arrive at least 30 minutes before show time. Late arrivals may be restricted during live performances. Unruly behavior will result in removal without refund.', color: '#8B5CF6' },
+                  { num: '3', title: 'Venue Facilities', content: 'Air-Conditioned Hall with Coolers. Fresh Drinking Water available. Clean Restrooms, Locker Facility, and Ample Parking provided.', color: '#10B981' },
+                  { num: '4', title: 'Seating & Categories', content: 'Seats allocated based on ticket category (VIP/Premium/General). Seat changes require staff approval. Group seating subject to availability.', color: '#F59E0B' },
+                  { num: '5', title: 'Photography & Media', content: 'Unauthorized videography, photography, or live streaming is strictly prohibited. By attending, you consent to being photographed for promotional purposes.', color: '#EF4444' },
+                  { num: '6', title: 'Refunds & Cancellations', content: 'No refunds for ticket cancellations, no-shows, or late arrivals. If event is canceled by organizers, full/partial refunds may be issued.', color: '#06B6D4' },
+                  { num: '7', title: 'Food & Beverages', content: 'Light snacks and beverages available at extra cost. Outside food not allowed. Alcoholic beverages strictly prohibited unless specified.', color: '#84CC16' },
+                  { num: '8', title: 'Safety & Security', content: 'All guests must undergo security screening. Hazardous objects prohibited. Emergency exits and fire safety systems available. Medical staff on-site.', color: '#EF4444' },
+                  { num: '9', title: 'Force Majeure', content: 'Organizer not liable for delays due to natural calamities, government orders, or circumstances beyond control. Rescheduling will be communicated.', color: '#6366F1' },
+                  { num: '10', title: 'Liability Disclaimer', content: 'Attendance at own risk. Organizer not responsible for injury, loss, theft, or damage to personal property. Take care of belongings.', color: '#F97316' },
+                ].map((item, idx) => (
+                  <View key={idx} style={{ flexDirection: 'row', gap: 12, paddingBottom: 12, borderBottomWidth: idx < 9 ? 1 : 0, borderBottomColor: '#F3F4F6' }}>
+                    <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: item.color, alignItems: 'center', justifyContent: 'center' }}>
+                      <ThemedText style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>{item.num}</ThemedText>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <ThemedText style={{ fontWeight: '600', color: '#111827', marginBottom: 4 }}>{item.title}</ThemedText>
+                      <ThemedText style={{ color: '#6B7280', fontSize: 13, lineHeight: 18 }}>{item.content}</ThemedText>
+                    </View>
+                  </View>
+                ))}
+              </View>
+
+              <View style={{ marginTop: 16, padding: 12, backgroundColor: '#F0FDF4', borderRadius: 8, flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+                <Ionicons name="checkmark-circle" size={20} color="#10B981" />
+                <ThemedText style={{ flex: 1, color: '#065F46', fontSize: 13, lineHeight: 18 }}>
+                  By purchasing a ticket and attending, you confirm that you have read, understood, and agreed to all Terms & Policies.
+                </ThemedText>
+              </View>
+            </View>
+          </>
+        )}
       </ScrollView>
 
       {/* Date Picker Modal */}
@@ -1296,21 +1483,21 @@ export default function BookingPage() {
             <View style={styles.summaryRows}>
               <View style={styles.summaryRow}>
                 <ThemedText style={styles.summaryLabel}>Subtotal</ThemedText>
-                <ThemedText style={styles.summaryValue}>₹{productSubtotal.toFixed(0)}</ThemedText>
+                <ThemedText style={styles.summaryValue}>â‚¹{productSubtotal.toFixed(0)}</ThemedText>
               </View>
               <View style={styles.summaryRow}>
                 <ThemedText style={styles.summaryLabel}>Add-ons</ThemedText>
-                <ThemedText style={styles.summaryValue}>₹{(addonsTotal || 0).toFixed(0)}</ThemedText>
+                <ThemedText style={styles.summaryValue}>â‚¹{(addonsTotal || 0).toFixed(0)}</ThemedText>
               </View>
               {offerDiscount > 0 ? (
                 <View style={styles.summaryRow}>
                   <ThemedText style={styles.summaryLabel}>Offer Discount</ThemedText>
-                  <ThemedText style={[styles.summaryValue, { color: '#10B981' }]}>−₹{offerDiscount.toFixed(0)}</ThemedText>
+                  <ThemedText style={[styles.summaryValue, { color: '#10B981' }]}>âˆ’â‚¹{offerDiscount.toFixed(0)}</ThemedText>
                 </View>
               ) : null}
               <View style={[styles.summaryRow, { marginTop: 8 }]}> 
                 <ThemedText style={[styles.summaryLabel, { fontWeight: '800' }]}>Total</ThemedText>
-                <ThemedText style={[styles.summaryValue, { fontWeight: '800' }]}>₹{totalAmountPreview.toFixed(0)}</ThemedText>
+                <ThemedText style={[styles.summaryValue, { fontWeight: '800' }]}>â‚¹{totalAmountPreview.toFixed(0)}</ThemedText>
               </View>
             </View>
           </Pressable>
@@ -1321,7 +1508,7 @@ export default function BookingPage() {
         <View style={{ flex: 1 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <ThemedText style={styles.footerTotalLabel}>Total</ThemedText>
-            <ThemedText style={styles.footerTotalAmount}>₹{totalAmountPreview.toFixed(0)}</ThemedText>
+            <ThemedText style={styles.footerTotalAmount}>â‚¹{totalAmountPreview.toFixed(0)}</ThemedText>
           </View>
         </View>
         {/* Arrow opens summary modal */}

@@ -1,4 +1,4 @@
-import AddonsSection from '@/components/AddonsSection';
+﻿import AddonsSection from '@/components/AddonsSection';
 import AudioRecorder from '@/components/AudioRecorder';
 import AuthModal from '@/components/AuthModal';
 import TimeSlotSelector from '@/components/TimeSlotSelector';
@@ -516,7 +516,7 @@ export default function LiveShowPage() {
         Alert.alert('Permission', 'We need access to your photos to upload a banner.');
         return;
       }
-      const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 0.8 });
+      const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.8 });
       if (!res.canceled && res.assets && res.assets.length > 0) {
         setBannerUri(res.assets[0].uri);
       }
@@ -536,7 +536,7 @@ export default function LiveShowPage() {
         Alert.alert('Permission', 'We need access to your photos to upload a stage banner.');
         return;
       }
-      const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 0.8 });
+      const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.8 });
       if (!res.canceled && res.assets && res.assets.length > 0) {
         setBannerImages(prev => ({
           ...prev,
@@ -563,10 +563,6 @@ export default function LiveShowPage() {
             </View>
           </View>
           <View style={{ flexDirection: 'row', gap: 8, marginTop: 8 }}>
-            <View style={styles.rateBadge}>
-              <Ionicons name="ticket" size={14} color="#065F46" />
-              <ThemedText style={styles.rateBadgeText}>Ticket ₹{Math.max(0, Number(ticketPrice) || 0)}</ThemedText>
-            </View>
             {(() => {
               if (!deadlineDateObj || !deadlineTimeObj) return null;
               const d = new Date(deadlineDateObj);
@@ -599,92 +595,7 @@ export default function LiveShowPage() {
           </View>
         </View>
 
-        {/* Details - MOVED TO TOP */}
-        <View style={styles.card}>
-          <ThemedText style={styles.cardTitle}>What’s Included – Experience</ThemedText>
-          <ThemedText style={{ color: '#6B7280', marginBottom: 8 }}>Enjoy a mesmerizing evening of music, rhythm, and entertainment — with comfort, quality, and convenience assured!</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', color: '#111827', marginTop: 8, marginBottom: 6 }}>Event Highlights</ThemedText>
-          <View style={{ gap: 6 }}>
-            <ThemedText>• Live Musical Performance by Professional Artists</ThemedText>
-            <ThemedText>• High-Quality Sound System for immersive experience</ThemedText>
-            <ThemedText>• Dynamic Lighting & Stage Effects</ThemedText>
-            <ThemedText>• Seating Arrangements for ticket holders</ThemedText>
-          </View>
-
-          <ThemedText style={{ fontWeight: '700', color: '#111827', marginTop: 12, marginBottom: 6 }}>Venue & Comfort</ThemedText>
-          <View style={{ gap: 6 }}>
-            <ThemedText>• Fully Air-Conditioned Hall with Coolers ensuring a pleasant environment</ThemedText>
-            <ThemedText>• Comfortable Seating with clear sound and visibility</ThemedText>
-            <ThemedText>• Fresh Drinking Water – Hot, Cold & Warm available throughout the venue</ThemedText>
-            <ThemedText>• Clean & Hygienic Washrooms for guests</ThemedText>
-          </View>
-
-          <ThemedText style={{ fontWeight: '700', color: '#111827', marginTop: 12, marginBottom: 6 }}>Convenience & Safety</ThemedText>
-          <View style={{ gap: 6 }}>
-            <ThemedText>• Ample Parking Facility</ThemedText>
-            <ThemedText>• Dedicated Entry & Exit Gates for crowd management</ThemedText>
-            <ThemedText>• Trained Security & Staff Support</ThemedText>
-          </View>
-
-          <ThemedText style={{ fontWeight: '700', color: '#111827', marginTop: 12, marginBottom: 6 }}>Food & Refreshments (Optional)</ThemedText>
-          <View style={{ gap: 6 }}>
-            <ThemedText>• Separate food area to ensure cleanliness and convenience</ThemedText>
-          </View>
-
-          <ThemedText style={{ fontWeight: '700', color: '#111827', marginTop: 12, marginBottom: 6 }}>Ticket Inclusions</ThemedText>
-          <View style={{ gap: 6 }}>
-            <ThemedText>• Entry to Musical Event</ThemedText>
-            <ThemedText>• Access to All Basic Facilities (Air-conditioned Hall, Drinking Water, Parking)</ThemedText>
-            <ThemedText>• Seat Reservation as per Ticket Category</ThemedText>
-          </View>
-        </View>
-
-        {/* Terms & Policies - MOVED TO BOTTOM */}
-        <View style={styles.card}>
-          <ThemedText style={styles.cardTitle}>Terms & Policies – Musical Event</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 4, marginBottom: 6 }}>1️⃣ Event Entry & Ticket Policy</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>Entry is permitted only with a valid ticket or e-pass issued through authorized channels. Each ticket admits one person only; duplication or transfer is not allowed without written approval. Attendees must carry a valid photo ID for verification at entry. Lost or misplaced tickets cannot be reissued or refunded. Re-entry is not permitted once a guest exits the event premises.</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 12, marginBottom: 6 }}>2️⃣ Event Timings & Conduct</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>Guests are requested to arrive at least 30 minutes before the show time to complete security checks and seating. The event will start on time; late arrivals may be restricted during live performances to avoid disturbance. Any unruly behavior, intoxication, or disturbance will result in removal from the venue without refund. Attendees are expected to respect performers, staff, and fellow guests at all times.</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 12, marginBottom: 6 }}>3️⃣ Venue Facilities & Amenities</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>Fully Air-Conditioned Hall with Coolers ensures a comfortable environment. Fresh Drinking Water (Hot, Cold & Warm) is available at designated points. Clean Restrooms, Locker Facility, and Ample Parking are provided for guest convenience. Guests are requested to maintain cleanliness and follow staff instructions while using the facilities.</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 12, marginBottom: 6 }}>4️⃣ Seating & Categories</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>Seats are allocated based on the ticket category (VIP / Premium / General). Seat changes are not allowed without the approval of event staff. For group bookings, adjacent seating is subject to availability at the time of purchase.</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 12, marginBottom: 6 }}>5️⃣ Photography & Media Rights</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>Unauthorized videography, photography, or live streaming is strictly prohibited. The organizer reserves the right to record, photograph, or broadcast the event for promotional or archival purposes. By attending, you consent to being photographed or filmed, and such images may be used in future promotions.</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 12, marginBottom: 6 }}>6️⃣ Refunds & Cancellations</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>No refunds will be provided for ticket cancellations, no-shows, or late arrivals. In case the event is canceled or postponed by the organizers, ticket holders will be informed, and full/partial refunds may be issued or tickets may be transferred to a rescheduled date. Refund requests (if applicable) will be processed only through official communication channels.</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 12, marginBottom: 6 }}>7️⃣ Food & Beverages</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>Light snacks and beverages may be available at the venue (at extra cost). Outside food and drinks are not allowed inside the event hall. Alcoholic beverages are strictly prohibited unless specified by the organizers.</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 12, marginBottom: 6 }}>8️⃣ Safety & Security</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>All guests must undergo security screening at entry. Hazardous, sharp, or flammable objects are strictly prohibited. Emergency exits and fire safety systems are available and monitored. Trained security and medical staff will be on-site throughout the event.</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 12, marginBottom: 6 }}>9️⃣ Force Majeure</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>The organizer shall not be held liable for any delay, cancellation, or rescheduling of the event due to natural calamities, government orders, pandemics, or circumstances beyond control. In such cases, rescheduling or alternate arrangements will be communicated.</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 12, marginBottom: 6 }}>🔟 Liability Disclaimer</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>Attendance is at the guest’s own risk. The organizer, venue, and event partners are not responsible for any injury, loss, theft, or damage to personal property. Guests are advised to take care of their belongings at all times.</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 12, marginBottom: 6 }}>11️⃣ Code of Conduct</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>Maintain decorum within the event premises. Smoking or consumption of prohibited substances is not allowed inside or near the hall. Children under 12 must be accompanied by an adult.</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 12, marginBottom: 6 }}>12️⃣ Organizer Rights</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>The organizer reserves the right to alter program details, performers, or schedule without prior notice. The event may include loud sound, lighting effects, and camera flashes; viewer discretion is advised.</ThemedText>
-
-          <ThemedText style={{ fontWeight: '700', marginTop: 12, marginBottom: 6 }}>✅ Acknowledgment</ThemedText>
-          <ThemedText style={{ color: '#374151' }}>By purchasing a ticket and attending the musical event, guests confirm that they have read, understood, and agreed to all the above Terms & Policies.</ThemedText>
-        </View>
-
-        {/* What's Included - MOVED TO BOTTOM */}
+        {/* Live Show Details */}
         <View style={styles.card}>
           <ThemedText style={styles.cardTitle}>Live Show Details</ThemedText>
           <View style={styles.inputWrap}>
@@ -931,37 +842,6 @@ export default function LiveShowPage() {
         </View>
         )}
 
-        {/* Voice Instructions */}
-        <View style={styles.card}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <Ionicons name="mic" size={24} color="#FF6F00" />
-            <ThemedText style={styles.cardTitle}>Voice Instructions (optional)</ThemedText>
-          </View>
-          <ThemedText style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}>
-            Have specific requirements? Record a voice note and our team will review it before your event.
-          </ThemedText>
-          <AudioRecorder 
-            bookingId={-1}
-            visible={true}
-            tempMode={true}
-            onRecordingSaved={(audioData) => {
-              console.log('Audio saved temporarily:', audioData);
-              setTempAudioData(audioData);
-            }} 
-          />
-          {tempAudioData && (
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 12, padding: 12, backgroundColor: '#D1FAE5', borderRadius: 8, gap: 8 }}>
-              <Ionicons name="checkmark-circle" size={20} color="#10B981" />
-              <ThemedText style={{ fontSize: 13, color: '#065F46', flex: 1 }}>
-                Voice instructions saved ({Math.floor(tempAudioData.duration / 60)}:{(tempAudioData.duration % 60).toString().padStart(2, '0')})
-              </ThemedText>
-            </View>
-          )}
-          <ThemedText style={{ fontSize: 12, color: '#9CA3AF', marginTop: 8, fontStyle: 'italic' }}>
-            Note: Voice notes will be linked to your booking after payment confirmation.
-          </ThemedText>
-        </View>
-
         {/* Date & Time (API-driven) */}
         <View 
           ref={timeSlotSelectorRef} 
@@ -1028,6 +908,8 @@ export default function LiveShowPage() {
             onTimeChange={(time) => setDeadlineTimeObj(time)}
             onDurationChange={() => {}}
             compact={true}
+            hideTitle={true}
+            hideLabels={true}
             hourlyRate={spaceData?.price_per_hour ?? HOURLY_RATE}
             durationOverrides={undefined}
           />
@@ -1121,6 +1003,188 @@ export default function LiveShowPage() {
             />
           );
         })()}
+
+        {/* Voice Instructions */}
+        <View style={styles.card}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <Ionicons name="mic" size={24} color="#FF6F00" />
+            <ThemedText style={styles.cardTitle}>Voice Instructions (optional)</ThemedText>
+          </View>
+          <ThemedText style={{ fontSize: 14, color: '#6B7280', marginBottom: 12 }}>
+            Have specific requirements? Record a voice note and our team will review it before your event.
+          </ThemedText>
+          <AudioRecorder 
+            bookingId={-1}
+            visible={true}
+            tempMode={true}
+            onRecordingSaved={(audioData) => {
+              console.log('Audio saved temporarily:', audioData);
+              setTempAudioData(audioData);
+            }} 
+          />
+          {tempAudioData && (
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 12, padding: 12, backgroundColor: '#D1FAE5', borderRadius: 8, gap: 8 }}>
+              <Ionicons name="checkmark-circle" size={20} color="#10B981" />
+              <ThemedText style={{ fontSize: 13, color: '#065F46', flex: 1 }}>
+                Voice instructions saved ({Math.floor(tempAudioData.duration / 60)}:{(tempAudioData.duration % 60).toString().padStart(2, '0')})
+              </ThemedText>
+            </View>
+          )}
+          <ThemedText style={{ fontSize: 12, color: '#9CA3AF', marginTop: 8, fontStyle: 'italic' }}>
+            Note: Voice notes will be linked to your booking after payment confirmation.
+          </ThemedText>
+        </View>
+
+        {/* What's Included – Experience - Modern Design */}
+        <View style={[styles.card, { marginTop: 16 }]}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+            <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: '#ECFDF5', alignItems: 'center', justifyContent: 'center' }}>
+              <Ionicons name="checkmark-circle" size={20} color="#10B981" />
+            </View>
+            <ThemedText style={{ fontSize: 16, fontWeight: '700', color: '#111827' }}>What's Included</ThemedText>
+          </View>
+          <ThemedText style={{ color: '#6B7280', marginBottom: 16, lineHeight: 20 }}>Enjoy a mesmerizing evening of music, rhythm, and entertainment — with comfort, quality, and convenience assured!</ThemedText>
+
+          {/* Event Highlights */}
+          <View style={{ marginBottom: 16 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+              <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: '#FEF3C7', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="star" size={14} color="#F59E0B" />
+              </View>
+              <ThemedText style={{ fontWeight: '600', color: '#111827' }}>Event Highlights</ThemedText>
+            </View>
+            <View style={{ gap: 8, paddingLeft: 36 }}>
+              {[
+                { icon: 'musical-notes', color: '#8B5CF6', text: 'Live Musical Performance by Professional Artists' },
+                { icon: 'volume-high', color: '#3B82F6', text: 'High-Quality Sound System for immersive experience' },
+                { icon: 'flash', color: '#F59E0B', text: 'Dynamic Lighting & Stage Effects' },
+                { icon: 'people', color: '#10B981', text: 'Seating Arrangements for ticket holders' },
+              ].map((item, idx) => (
+                <View key={idx} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+                  <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: `${item.color}15`, alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
+                    <Ionicons name={item.icon as any} size={12} color={item.color} />
+                  </View>
+                  <ThemedText style={{ flex: 1, color: '#374151', lineHeight: 20 }}>{item.text}</ThemedText>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Venue & Comfort */}
+          <View style={{ marginBottom: 16 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+              <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: '#DBEAFE', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="home" size={14} color="#3B82F6" />
+              </View>
+              <ThemedText style={{ fontWeight: '600', color: '#111827' }}>Venue & Comfort</ThemedText>
+            </View>
+            <View style={{ gap: 8, paddingLeft: 36 }}>
+              {[
+                { icon: 'snow', color: '#06B6D4', text: 'Fully Air-Conditioned Hall with Coolers' },
+                { icon: 'bed', color: '#8B5CF6', text: 'Comfortable Seating with clear sound and visibility' },
+                { icon: 'water', color: '#3B82F6', text: 'Fresh Drinking Water – Hot, Cold & Warm available' },
+                { icon: 'sparkles', color: '#10B981', text: 'Clean & Hygienic Washrooms for guests' },
+              ].map((item, idx) => (
+                <View key={idx} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+                  <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: `${item.color}15`, alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
+                    <Ionicons name={item.icon as any} size={12} color={item.color} />
+                  </View>
+                  <ThemedText style={{ flex: 1, color: '#374151', lineHeight: 20 }}>{item.text}</ThemedText>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Convenience & Safety */}
+          <View style={{ marginBottom: 16 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+              <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: '#FEE2E2', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="shield-checkmark" size={14} color="#EF4444" />
+              </View>
+              <ThemedText style={{ fontWeight: '600', color: '#111827' }}>Convenience & Safety</ThemedText>
+            </View>
+            <View style={{ gap: 8, paddingLeft: 36 }}>
+              {[
+                { icon: 'car', color: '#6366F1', text: 'Ample Parking Facility' },
+                { icon: 'enter', color: '#10B981', text: 'Dedicated Entry & Exit Gates for crowd management' },
+                { icon: 'shield', color: '#EF4444', text: 'Trained Security & Staff Support' },
+              ].map((item, idx) => (
+                <View key={idx} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+                  <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: `${item.color}15`, alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
+                    <Ionicons name={item.icon as any} size={12} color={item.color} />
+                  </View>
+                  <ThemedText style={{ flex: 1, color: '#374151', lineHeight: 20 }}>{item.text}</ThemedText>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Ticket Inclusions */}
+          <View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+              <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: '#F3E8FF', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="ticket" size={14} color="#8B5CF6" />
+              </View>
+              <ThemedText style={{ fontWeight: '600', color: '#111827' }}>Ticket Inclusions</ThemedText>
+            </View>
+            <View style={{ gap: 8, paddingLeft: 36 }}>
+              {[
+                { icon: 'musical-note', color: '#8B5CF6', text: 'Entry to Musical Event' },
+                { icon: 'apps', color: '#3B82F6', text: 'Access to All Basic Facilities (AC Hall, Drinking Water, Parking)' },
+                { icon: 'grid', color: '#10B981', text: 'Seat Reservation as per Ticket Category' },
+              ].map((item, idx) => (
+                <View key={idx} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+                  <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: `${item.color}15`, alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
+                    <Ionicons name={item.icon as any} size={12} color={item.color} />
+                  </View>
+                  <ThemedText style={{ flex: 1, color: '#374151', lineHeight: 20 }}>{item.text}</ThemedText>
+                </View>
+              ))}
+            </View>
+          </View>
+        </View>
+
+        {/* Terms & Policies - Modern Design */}
+        <View style={[styles.card, { marginTop: 12, marginBottom: 80 }]}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+            <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: '#FEF3C7', alignItems: 'center', justifyContent: 'center' }}>
+              <Ionicons name="document-text" size={20} color="#F59E0B" />
+            </View>
+            <ThemedText style={{ fontSize: 16, fontWeight: '700', color: '#111827' }}>Terms & Policies</ThemedText>
+          </View>
+
+          <View style={{ gap: 12 }}>
+            {[
+              { num: '1', title: 'Event Entry & Ticket Policy', content: 'Entry is permitted only with a valid ticket or e-pass. Each ticket admits one person only. Attendees must carry a valid photo ID. Lost tickets cannot be reissued. Re-entry is not permitted once you exit.', color: '#3B82F6' },
+              { num: '2', title: 'Event Timings & Conduct', content: 'Arrive at least 30 minutes before show time. Late arrivals may be restricted during live performances. Unruly behavior will result in removal without refund.', color: '#8B5CF6' },
+              { num: '3', title: 'Venue Facilities', content: 'Air-Conditioned Hall with Coolers. Fresh Drinking Water available. Clean Restrooms, Locker Facility, and Ample Parking provided.', color: '#10B981' },
+              { num: '4', title: 'Seating & Categories', content: 'Seats allocated based on ticket category (VIP/Premium/General). Seat changes require staff approval. Group seating subject to availability.', color: '#F59E0B' },
+              { num: '5', title: 'Photography & Media', content: 'Unauthorized videography, photography, or live streaming is strictly prohibited. By attending, you consent to being photographed for promotional purposes.', color: '#EF4444' },
+              { num: '6', title: 'Refunds & Cancellations', content: 'No refunds for ticket cancellations, no-shows, or late arrivals. If event is canceled by organizers, full/partial refunds may be issued.', color: '#06B6D4' },
+              { num: '7', title: 'Food & Beverages', content: 'Light snacks and beverages available at extra cost. Outside food not allowed. Alcoholic beverages strictly prohibited unless specified.', color: '#84CC16' },
+              { num: '8', title: 'Safety & Security', content: 'All guests must undergo security screening. Hazardous objects prohibited. Emergency exits and fire safety systems available. Medical staff on-site.', color: '#EF4444' },
+              { num: '9', title: 'Force Majeure', content: 'Organizer not liable for delays due to natural calamities, government orders, or circumstances beyond control. Rescheduling will be communicated.', color: '#6366F1' },
+              { num: '10', title: 'Liability Disclaimer', content: 'Attendance at own risk. Organizer not responsible for injury, loss, theft, or damage to personal property. Take care of belongings.', color: '#F97316' },
+            ].map((item, idx) => (
+              <View key={idx} style={{ flexDirection: 'row', gap: 12, paddingBottom: 12, borderBottomWidth: idx < 9 ? 1 : 0, borderBottomColor: '#F3F4F6' }}>
+                <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: item.color, alignItems: 'center', justifyContent: 'center' }}>
+                  <ThemedText style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>{item.num}</ThemedText>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <ThemedText style={{ fontWeight: '600', color: '#111827', marginBottom: 4 }}>{item.title}</ThemedText>
+                  <ThemedText style={{ color: '#6B7280', fontSize: 13, lineHeight: 18 }}>{item.content}</ThemedText>
+                </View>
+              </View>
+            ))}
+          </View>
+
+          <View style={{ marginTop: 16, padding: 12, backgroundColor: '#F0FDF4', borderRadius: 8, flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+            <Ionicons name="checkmark-circle" size={20} color="#10B981" />
+            <ThemedText style={{ flex: 1, color: '#065F46', fontSize: 13, lineHeight: 18 }}>
+              By purchasing a ticket and attending, you confirm that you have read, understood, and agreed to all Terms & Policies.
+            </ThemedText>
+          </View>
+        </View>
 
         {/* Stage decorations - disabled for Live Show */}
         {false && (

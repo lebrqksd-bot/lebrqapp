@@ -1085,6 +1085,7 @@ export default function GrantHallPage() {
   const [selectedPaidFeatures, setSelectedPaidFeatures] = useState<Set<string>>(new Set());
   const [expandedPaidFeatures, setExpandedPaidFeatures] = useState<Set<string>>(new Set());
   const [paidFeatureQuantities, setPaidFeatureQuantities] = useState<Record<string, number>>({});
+  const [paidFeatureHours, setPaidFeatureHours] = useState<Record<string, number>>({});
   const [showAllPaidFeatures, setShowAllPaidFeatures] = useState(false);
   const [bannerSize, setBannerSize] = useState<string>('');
   const [bannerImages, setBannerImages] = useState<Record<string, string>>({});
@@ -1601,14 +1602,13 @@ export default function GrantHallPage() {
         const quantity = paidFeatureQuantities[featureId] || 1;
         return sum + (itemPrice * quantity);
       } else {
-        // Hour-based: base_price + (hours - 1) * additional_hour_price
+        // Hour-based: base_price * selected hours for this feature
         const basePrice = feature.base_price || 0;
-        const additionalHourPrice = feature.additional_hour_price || 0;
-        const featureTotal = basePrice + (hours > 1 ? (hours - 1) * additionalHourPrice : 0);
-        return sum + featureTotal;
+        const featureHours = paidFeatureHours[featureId] || 1;
+        return sum + (basePrice * featureHours);
       }
     }, 0);
-  }, [selectedPaidFeatures, hallFeatures, hours, paidFeatureQuantities]);
+  }, [selectedPaidFeatures, hallFeatures, paidFeatureQuantities, paidFeatureHours]);
   
   // Calculate total transport cost from all locations
   // Transport is currently disabled; keep this at 0 to avoid runtime errors.
@@ -1764,7 +1764,7 @@ export default function GrantHallPage() {
         Alert.alert('Permission', 'We need access to your photos to upload a banner.');
         return;
       }
-      const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 0.8 });
+      const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.8 });
       if (!res.canceled && res.assets && res.assets.length > 0) {
         setBannerImages(prev => ({
           ...prev,
@@ -2028,17 +2028,26 @@ export default function GrantHallPage() {
                               const newSet = new Set(prev);
                               if (newSet.has(featureId)) {
                                 newSet.delete(featureId);
-                                // Reset quantity when deselected
+                                // Reset quantity/hours when deselected
                                 setPaidFeatureQuantities(prev => {
                                   const newQty = { ...prev };
                                   delete newQty[featureId];
                                   return newQty;
+                                });
+                                setPaidFeatureHours(prev => {
+                                  const newHrs = { ...prev };
+                                  delete newHrs[featureId];
+                                  return newHrs;
                                 });
                               } else {
                                 newSet.add(featureId);
                                 // Set default quantity for item-based features
                                 if (pricingType === 'item') {
                                   setPaidFeatureQuantities(prev => ({ ...prev, [featureId]: 1 }));
+                                }
+                                // Set default hours for hour-based features
+                                if (pricingType === 'hour') {
+                                  setPaidFeatureHours(prev => ({ ...prev, [featureId]: 1 }));
                                 }
                               }
                               return newSet;
@@ -2139,6 +2148,58 @@ export default function GrantHallPage() {
                                   height: 36,
                                   borderRadius: 8,
                                   backgroundColor: '#10B981',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}
+                                activeOpacity={0.7}
+                              >
+                                <Ionicons name="add" size={20} color="#fff" />
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        )}
+                        
+                        {/* Hour Selector for Hour-Based Features */}
+                        {isSelected && pricingType === 'hour' && f.base_price && (
+                          <View style={{ marginBottom: 10, padding: 10, backgroundColor: '#EEF2FF', borderRadius: 8, borderWidth: 1, borderColor: '#818CF8' }}>
+                            <ThemedText style={{ fontSize: 12, color: '#6B7280', fontWeight: '600', marginBottom: 6 }}>Number of Hours:</ThemedText>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  const currentHours = paidFeatureHours[featureId] || 1;
+                                  if (currentHours > 1) {
+                                    setPaidFeatureHours(prev => ({ ...prev, [featureId]: currentHours - 1 }));
+                                  }
+                                }}
+                                style={{
+                                  width: 36,
+                                  height: 36,
+                                  borderRadius: 8,
+                                  backgroundColor: (paidFeatureHours[featureId] || 1) > 1 ? '#EF4444' : '#D1D5DB',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}
+                                disabled={(paidFeatureHours[featureId] || 1) <= 1}
+                                activeOpacity={0.7}
+                              >
+                                <Ionicons name="remove" size={20} color="#fff" />
+                              </TouchableOpacity>
+                              <View style={{ flex: 1, alignItems: 'center' }}>
+                                <ThemedText style={{ fontSize: 18, fontWeight: '800', color: '#111827' }}>{paidFeatureHours[featureId] || 1}</ThemedText>
+                                <ThemedText style={{ fontSize: 11, color: '#6B7280' }}>
+                                  {(paidFeatureHours[featureId] || 1) === 1 ? 'hour' : 'hours'} × ₹{f.base_price?.toFixed(2) || 0} = ₹{((f.base_price || 0) * (paidFeatureHours[featureId] || 1)).toFixed(2)}
+                                </ThemedText>
+                              </View>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  const currentHours = paidFeatureHours[featureId] || 1;
+                                  setPaidFeatureHours(prev => ({ ...prev, [featureId]: currentHours + 1 }));
+                                }}
+                                style={{
+                                  width: 36,
+                                  height: 36,
+                                  borderRadius: 8,
+                                  backgroundColor: '#6366F1',
                                   justifyContent: 'center',
                                   alignItems: 'center',
                                 }}
@@ -3071,6 +3132,7 @@ export default function GrantHallPage() {
               
               let featureTotal = 0;
               let quantity = 1;
+              let featureHours = 1;
               
               if (pricingType === 'item') {
                 // Item-based: price × quantity
@@ -3078,20 +3140,20 @@ export default function GrantHallPage() {
                 const itemPrice = feature.item_price || 0;
                 featureTotal = itemPrice * quantity;
               } else {
-                // Hour-based: base_price + (hours - 1) * additional_hour_price
+                // Hour-based: base_price × selected hours
                 const basePrice = feature.base_price || 0;
-                const additionalHourPrice = feature.additional_hour_price || 0;
-                featureTotal = basePrice + (hours > 1 ? (hours - 1) * additionalHourPrice : 0);
+                featureHours = paidFeatureHours[featureId] || 1;
+                featureTotal = basePrice * featureHours;
               }
               
               return {
                 id: `paid-feature-${featureId}`,
                 label: feature.label,
-                quantity: quantity,
-                price: pricingType === 'item' ? (feature.item_price || 0) : featureTotal,
+                quantity: pricingType === 'hour' ? featureHours : quantity,
+                price: pricingType === 'item' ? (feature.item_price || 0) : (feature.base_price || 0),
                 total: featureTotal,
                 _source: 'paid_feature',
-                hours_used: pricingType === 'hour' ? hours : undefined, // Store hours used only for hour-based features
+                hours_used: pricingType === 'hour' ? featureHours : undefined, // Store hours used only for hour-based features
               };
             }).filter(Boolean) as Array<{ id: string; label: string; quantity: number; price: number; total: number; _source: string; hours_used?: number }>;
             
@@ -3421,6 +3483,7 @@ export default function GrantHallPage() {
                 
                 const pricingType = feature.pricing_type || (feature.item_price ? 'item' : 'hour');
                 const quantity = paidFeatureQuantities[featureId] || 1;
+                const featureHours = paidFeatureHours[featureId] || 1;
                 
                 let featureTotal = 0;
                 let label = feature.label;
@@ -3431,13 +3494,10 @@ export default function GrantHallPage() {
                   featureTotal = itemPrice * quantity;
                   label += ` (${quantity} × ₹${itemPrice.toFixed(2)})`;
                 } else {
-                  // Hour-based: base_price + (hours - 1) * additional_hour_price
+                  // Hour-based: base_price × selected hours
                   const basePrice = feature.base_price || 0;
-                  const additionalHourPrice = feature.additional_hour_price || 0;
-                  featureTotal = basePrice + (hours > 1 ? (hours - 1) * additionalHourPrice : 0);
-                  if (hours > 1 && additionalHourPrice > 0) {
-                    label += ` (${hours}h: ₹${basePrice} + ${hours - 1}×₹${additionalHourPrice})`;
-                  }
+                  featureTotal = basePrice * featureHours;
+                  label += ` (${featureHours}h × ₹${basePrice.toFixed(2)})`;
                 }
                 
                 return (
@@ -4195,7 +4255,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E6E8EA',
     alignSelf: 'center',
-    minHeight: 200,
+    minHeight: 160,
     maxHeight: 300,
   },
   topBannerScroll: {
@@ -4204,14 +4264,13 @@ const styles = StyleSheet.create({
   topBannerItem: {
     justifyContent: 'center',
     alignItems: 'center',
-    minHeight: 200,
+    minHeight: 160,
     maxHeight: 300,
-    padding: 8,
   },
   topBannerImage: {
     width: '100%',
     height: '100%',
-    minHeight: 200,
+    minHeight: 160,
     maxWidth: '100%',
     maxHeight: 300,
   },

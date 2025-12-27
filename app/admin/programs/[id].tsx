@@ -99,7 +99,7 @@ export default function ProgramDetail() {
             <TextInput style={[styles.input, { height: 120 }]} placeholder="Description" value={description} onChangeText={setDescription} multiline />
             {!!posterUrl && <ThemedText style={{marginBottom:8}}>Poster: {posterUrl}</ThemedText>}
             <TouchableOpacity style={[styles.btn, styles.upload]} onPress={async ()=>{
-              const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 0.8 });
+              const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.8 });
               if (!res.canceled && res.assets.length) {
                 const a = res.assets[0];
                 const form = new FormData();

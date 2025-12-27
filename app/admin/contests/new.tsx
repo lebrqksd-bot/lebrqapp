@@ -95,7 +95,7 @@ export default function NewContestPage() {
   const pickImage = async (type: 'hero' | 'banner') => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ['images'],
         allowsEditing: true,
         aspect: type === 'hero' ? [16, 9] : [3, 1],
         quality: 0.8,

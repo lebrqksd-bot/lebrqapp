@@ -443,6 +443,31 @@ async def upload_staff_document(
     with open(file_path, "wb") as f:
         f.write(content)
     
+    # Optimize images (photos, id documents)
+    optimization_info = None
+    image_extensions = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
+    if file_ext.lower() in image_extensions:
+        try:
+            from ..utils.image_optimizer import optimize_image, PILLOW_AVAILABLE
+            if PILLOW_AVAILABLE:
+                # Use thumbnail config for staff photos
+                optimized_path, orig_size, opt_size = optimize_image(
+                    str(file_path),
+                    image_type="thumbnail",
+                    keep_original=False
+                )
+                # Update filename if extension changed
+                unique_filename = os.path.basename(optimized_path)
+                file_path = Path(optimized_path)
+                optimization_info = {
+                    "original_kb": round(orig_size / 1024, 1),
+                    "optimized_kb": round(opt_size / 1024, 1),
+                    "reduction_pct": round((1 - opt_size / orig_size) * 100, 1) if orig_size > 0 else 0
+                }
+        except Exception as opt_err:
+            print(f"[STAFF] Image optimization failed: {opt_err}")
+            # Continue with unoptimized image
+    
     # Generate file URL
     file_url = f"/uploads/staff_documents/{staff_id}/{unique_filename}"
     

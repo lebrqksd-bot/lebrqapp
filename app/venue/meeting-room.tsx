@@ -64,13 +64,13 @@ type AddOnSubItem = {
 // Import CONFIG for API URL
 import { CONFIG } from '@/constants/config';
 
-// Default fallback data
+// Default fallback data - using smaller optimized images
 const DEFAULT_HALL_FEATURES: HallFeature[] = [
-  { id: 'tv', label: 'TV/Display', image: { uri: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' } },
-  { id: 'wifi', label: 'Wi‑Fi', image: { uri: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' } },
-  { id: 'ac', label: 'AC', image: { uri: 'https://images.unsplash.com/photo-1604335399105-a0d7d9c9f51f?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' } },
-  { id: 'capacity', label: '12 Seats', image: { uri: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' } },
-  { id: 'drinks', label: 'Drinking Water', image: { uri: 'https://images.unsplash.com/photo-1510626176961-4b57d4fbad03?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' } },
+  { id: 'tv', label: 'TV/Display', image: { uri: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=200&q=50&auto=format&fit=crop&fm=webp' } },
+  { id: 'wifi', label: 'Wi‑Fi', image: { uri: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=200&q=50&auto=format&fit=crop&fm=webp' } },
+  { id: 'ac', label: 'AC', image: { uri: 'https://images.unsplash.com/photo-1604335399105-a0d7d9c9f51f?w=200&q=50&auto=format&fit=crop&fm=webp' } },
+  { id: 'capacity', label: '12 Seats', image: { uri: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=200&q=50&auto=format&fit=crop&fm=webp' } },
+  { id: 'drinks', label: 'Drinking Water', image: { uri: 'https://images.unsplash.com/photo-1510626176961-4b57d4fbad03?w=200&q=50&auto=format&fit=crop&fm=webp' } },
 ];
 
 // Meeting room hourly rate
@@ -203,12 +203,15 @@ export default function MeetingRoomPage() {
 
 
   // Helper function to construct full image URL
-  const getImageUrl = (imageUrl?: string | null): string | null => {
+  const getImageUrl = (imageUrl?: string | null, size: 'thumb' | 'banner' = 'thumb'): string | null => {
     if (!imageUrl) return null;
-    // Optimize Unsplash images for faster loading
-    if (imageUrl.startsWith('http') && imageUrl.includes('unsplash.com')) {
+    // Optimize Unsplash images for faster loading with smaller sizes
+    if (imageUrl.startsWith('http') && (imageUrl.includes('unsplash.com') || imageUrl.includes('istockphoto.com'))) {
       const url = imageUrl.split('?')[0];
-      return `${url}?w=600&q=60&auto=format`;
+      // Use smaller size for thumbnails (feature icons), larger for banners
+      const width = size === 'thumb' ? 200 : 600;
+      const quality = size === 'thumb' ? 50 : 70;
+      return `${url}?w=${width}&q=${quality}&auto=format&fit=crop&fm=webp`;
     }
     if (imageUrl.startsWith('http')) return imageUrl;
     if (imageUrl.startsWith('/assets/')) {
@@ -404,9 +407,7 @@ export default function MeetingRoomPage() {
           if (obj.time) setTimeObj(new Date(obj.time));
           if (obj.hours) setHours(obj.hours);
           if (obj.guests) setGuests(Math.min(12, obj.guests));
-          if (obj.transport) {
-            if (obj.transport.location) setTransportLocation(obj.transport.location);
-          }
+          // Transport not used in meeting room - skip restoration
           if (typeof obj.addonsGrandTotal === 'number') setAddonsGrandTotal(obj.addonsGrandTotal);
           if (Array.isArray(obj.addonsDetails)) setAddonsDetails(obj.addonsDetails);
         }
@@ -496,7 +497,7 @@ export default function MeetingRoomPage() {
                 pagingEnabled
               >
                 {topBanners.map((bannerUrl, index) => {
-                  const fullUrl = getImageUrl(bannerUrl);
+                  const fullUrl = getImageUrl(bannerUrl, 'banner');
                   if (!fullUrl) return null;
                   return (
                     <View key={index} style={[styles.topBannerItem, { 
@@ -507,8 +508,11 @@ export default function MeetingRoomPage() {
                         source={{ uri: fullUrl }}
                         style={styles.topBannerImage}
                         contentFit="cover"
-                        transition={200}
+                        transition={150}
                         cachePolicy="memory-disk"
+                        placeholder={{ uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN88P/BfwYAB9MD/eFX5PoAAAAASUVORK5CYII=' }}
+                        placeholderContentFit="cover"
+                        priority="high"
                       />
                     </View>
                   );
@@ -521,11 +525,13 @@ export default function MeetingRoomPage() {
           {topBanners.length === 0 && (
             <View style={styles.hallImageCard}>
               <ExpoImage 
-                source={roomImageUrl.startsWith('/') ? require('@/assets/images/meeting.jpg') : { uri: getImageUrl(roomImageUrl) }} 
+                source={roomImageUrl.startsWith('/') ? require('@/assets/images/meeting.jpg') : { uri: getImageUrl(roomImageUrl, 'banner') }} 
                 style={styles.hallImage} 
                 contentFit="cover" 
-                transition={200}
+                transition={150}
                 cachePolicy="memory-disk"
+                placeholder={{ uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN88P/BfwYAB9MD/eFX5PoAAAAASUVORK5CYII=' }}
+                priority="high"
               />
             </View>
           )}
@@ -539,11 +545,11 @@ export default function MeetingRoomPage() {
           {hallFeatures.filter(f => f.paid !== true).length > 0 && (
             <View style={{ marginBottom: 16 }}>
               <View style={styles.featureGrid}>
-                {hallFeatures.filter(f => f.paid !== true).map((f) => (
+                {hallFeatures.filter(f => f.paid !== true).map((f, index) => (
                   <View key={f.id} style={styles.featureItem}>
                     <View style={styles.featureImgWrap}>
                       {imageLoadingStates[`${f.id}-free`] && <ActivityIndicator size="small" color="#10B981" style={{ position: 'absolute', zIndex: 1 }} />}
-                      <ExpoImage source={(f.image as any) || undefined} style={styles.featureImg} contentFit="cover" cachePolicy="memory-disk" onLoadStart={() => setImageLoadingStates(prev => ({ ...prev, [`${f.id}-free`]: true }))} onLoad={() => setImageLoadingStates(prev => ({ ...prev, [`${f.id}-free`]: false }))} onError={() => setImageLoadingStates(prev => ({ ...prev, [`${f.id}-free`]: false }))} />
+                      <ExpoImage source={typeof f.image === 'object' && f.image?.uri ? { uri: getImageUrl(f.image.uri, 'thumb') || f.image.uri } : (f.image as any) || undefined} style={styles.featureImg} contentFit="cover" cachePolicy="memory-disk" transition={100} placeholder={{ uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN88OjRfwYAB8kD8W4h7FAAAAAASUVORK5CYII=' }} priority={index < 6 ? 'high' : 'low'} onLoadStart={() => setImageLoadingStates(prev => ({ ...prev, [`${f.id}-free`]: true }))} onLoad={() => setImageLoadingStates(prev => ({ ...prev, [`${f.id}-free`]: false }))} onError={() => setImageLoadingStates(prev => ({ ...prev, [`${f.id}-free`]: false }))} />
                     </View>
                     <ThemedText style={{ fontWeight: '400', color: '#111827' }}>{f.label}</ThemedText>
                   </View>
@@ -560,11 +566,11 @@ export default function MeetingRoomPage() {
                 <ThemedText style={{ fontSize: 16, fontWeight: '700', color: '#F59E0B' }}>Paid</ThemedText>
               </View>
               <View style={styles.featureGrid}>
-                {hallFeatures.filter(f => f.paid === true).map((f) => (
+                {hallFeatures.filter(f => f.paid === true).map((f, index) => (
                   <View key={f.id} style={styles.featureItem}>
                     <View style={styles.featureImgWrap}>
                       {imageLoadingStates[`${f.id}-paid`] && <ActivityIndicator size="small" color="#10B981" style={{ position: 'absolute', zIndex: 1 }} />}
-                      <ExpoImage source={(f.image as any) || undefined} style={styles.featureImg} contentFit="cover" cachePolicy="memory-disk" onLoadStart={() => setImageLoadingStates(prev => ({ ...prev, [`${f.id}-paid`]: true }))} onLoad={() => setImageLoadingStates(prev => ({ ...prev, [`${f.id}-paid`]: false }))} onError={() => setImageLoadingStates(prev => ({ ...prev, [`${f.id}-paid`]: false }))} />
+                      <ExpoImage source={typeof f.image === 'object' && f.image?.uri ? { uri: getImageUrl(f.image.uri, 'thumb') || f.image.uri } : (f.image as any) || undefined} style={styles.featureImg} contentFit="cover" cachePolicy="memory-disk" transition={100} placeholder={{ uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN88OjRfwYAB8kD8W4h7FAAAAAASUVORK5CYII=' }} priority={index < 4 ? 'normal' : 'low'} onLoadStart={() => setImageLoadingStates(prev => ({ ...prev, [`${f.id}-paid`]: true }))} onLoad={() => setImageLoadingStates(prev => ({ ...prev, [`${f.id}-paid`]: false }))} onError={() => setImageLoadingStates(prev => ({ ...prev, [`${f.id}-paid`]: false }))} />
                     </View>
                     <ThemedText style={{ fontWeight: '400', color: '#111827' }}>{f.label}</ThemedText>
                   </View>
@@ -1138,7 +1144,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E6E8EA',
     alignSelf: 'center',
-    minHeight: 200,
+    minHeight: 160,
     maxHeight: 300,
   },
   topBannerScroll: {
@@ -1147,14 +1153,13 @@ const styles = StyleSheet.create({
   topBannerItem: {
     justifyContent: 'center',
     alignItems: 'center',
-    minHeight: 200,
+    minHeight: 160,
     maxHeight: 300,
-    padding: 8,
   },
   topBannerImage: {
     width: '100%',
     height: '100%',
-    minHeight: 200,
+    minHeight: 160,
     maxWidth: '100%',
     maxHeight: 300,
   },

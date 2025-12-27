@@ -5,7 +5,7 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { decode } from 'html-entities';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Platform, ScrollView, StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ContentPage {
@@ -125,7 +125,7 @@ export default function AboutPage() {
   const safeAreaPadding = 20; // Safe area padding
   const readMoreButtonHeight = 40; // Approximate height of read more button
   const nameSectionHeight = 60; // Approximate height of name/title section
-  const quotationImageHeight = 80; // Approximate height of quotation image
+  const quotationImageHeight = isSmallScreen ? 40 : 80; // Approximate height of quotation image
   const textPadding = 40; // Padding for text section
   
   const availableHeight = isSmallScreen ? height - topBarHeight - safeAreaPadding : height;
@@ -238,22 +238,25 @@ export default function AboutPage() {
               </View>
               
               {/* Text Paragraphs - Dynamic Content */}
-          {loading ? (
-                <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color="#14B8A6" />
-                </View>
-              ) : (
-                <View style={maxTextHeightWhenCollapsed ? { maxHeight: maxTextHeightWhenCollapsed, overflow: 'hidden' as const } : undefined}>
-                  {displayedParagraphs.map((paragraph, index) => (
+              <View style={maxTextHeightWhenCollapsed ? { maxHeight: maxTextHeightWhenCollapsed, overflow: 'hidden' as const } : undefined}>
+                {loading ? (
+                  // Skeleton placeholder text while loading
+                  <>
+                    <View style={[isSmallScreen ? styles.paragraphSmall : styles.paragraph, { backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 4, height: isSmallScreen ? 66 : 84, marginBottom: isSmallScreen ? 12 : 16 }]} />
+                    <View style={[isSmallScreen ? styles.paragraphSmall : styles.paragraph, { backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 4, height: isSmallScreen ? 44 : 56, marginBottom: isSmallScreen ? 12 : 16 }]} />
+                    <View style={[isSmallScreen ? styles.paragraphSmall : styles.paragraph, { backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 4, height: isSmallScreen ? 22 : 28, width: '70%' }]} />
+                  </>
+                ) : (
+                  displayedParagraphs.map((paragraph, index) => (
                     <ThemedText 
                       key={index} 
                       style={isSmallScreen ? styles.paragraphSmall : styles.paragraph}
                     >
                       {paragraph}
                     </ThemedText>
-                  ))}
-                </View>
-              )}
+                  ))
+                )}
+              </View>
               
               {/* Read More/Less Link - Only show if content exceeds screen */}
               {needsReadMore && (
@@ -338,11 +341,20 @@ export default function AboutPage() {
                 </View>
                 
                 {/* Text Paragraphs */}
-                {paragraphs.map((paragraph, index) => (
-                  <ThemedText key={index} style={styles.paragraph}>
-                    {paragraph}
-                  </ThemedText>
-                ))}
+                {loading ? (
+                  // Skeleton placeholder text while loading
+                  <>
+                    <View style={[styles.paragraph, { backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 4, height: 84, marginBottom: 16 }]} />
+                    <View style={[styles.paragraph, { backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 4, height: 56, marginBottom: 16 }]} />
+                    <View style={[styles.paragraph, { backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: 4, height: 28, width: '70%' }]} />
+                  </>
+                ) : (
+                  paragraphs.map((paragraph, index) => (
+                    <ThemedText key={index} style={styles.paragraph}>
+                      {paragraph}
+                    </ThemedText>
+                  ))
+                )}
                 
                 {/* Name and Title */}
                 <View style={styles.nameSection}>
@@ -459,8 +471,8 @@ const styles = StyleSheet.create({
     }),
   },
   quotationImageSmall: {
-    width: 80,
-    height: 80,
+    width: 40,
+    height: 40,
     ...(Platform.OS === 'web' && {
       filter: 'brightness(0) saturate(100%) invert(68%) sepia(67%) saturate(500%) hue-rotate(140deg) brightness(95%) contrast(90%)',
     }),

@@ -1,6 +1,7 @@
 export const CONTACT_DETAILS = {
   phone: '+919633181898',
   whatsapp: '+916238191898',
+  zumbaWhatsapp: '+919745405059', // Zumba & enquiry specific number
   landlines: ['04994-225-895', '04994-225-896', '04994-225-897', '04994-225-898'],
   email: 'lebrq@gmail.com',
   addressTitle: 'Our Address',
