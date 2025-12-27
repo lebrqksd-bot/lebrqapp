@@ -671,10 +671,17 @@ export default function GrantHallPage() {
     return DEFAULT_HALL_FEATURES;
   }, [spaceData]);
 
-  // Extract top banners: force static banner image from assets as requested
+  // Extract top banners from API data or use a fallback Unsplash image
   const topBanners = useMemo(() => {
-    return ['/assets/images/function.jpg'];
-  }, []);
+    // Try to get top_banners from API response (features.top_banners)
+    if (spaceData?.features && typeof spaceData.features === 'object' && !Array.isArray(spaceData.features)) {
+      if (Array.isArray(spaceData.features.top_banners) && spaceData.features.top_banners.length > 0) {
+        return spaceData.features.top_banners;
+      }
+    }
+    // Fallback to Unsplash image that works on web
+    return ['https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1200&auto=format&fit=crop'];
+  }, [spaceData]);
   
   // Always use the 5 main categories - don't depend on API data
   // MEMOIZED to prevent recreation on every render and infinite loops
