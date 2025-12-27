@@ -92,13 +92,29 @@ import { CONFIG } from '@/constants/config';
 
 // Default fallback data (will be replaced by API data)
 const DEFAULT_HALL_FEATURES: HallFeature[] = [
-  { id: 'mic', label: 'Mic', image: { uri: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&q=60&auto=format&fit=crop' } },
-  { id: 'sound', label: 'Sound System', image: { uri: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=60&auto=format&fit=crop' } },
-  { id: 'ac', label: 'AC', image: { uri: 'https://images.unsplash.com/photo-1604335399105-a0d7d9c9f51f?w=400&q=60&auto=format&fit=crop' } },
-  { id: 'capacity', label: '500 Seats', image: { uri: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=400&q=60&auto=format&fit=crop' } },
-  { id: 'food', label: 'Food', image: { uri: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&q=60&auto=format&fit=crop' } },
-  { id: 'drinks', label: 'Drinks', image: { uri: 'https://images.unsplash.com/photo-1510626176961-4b57d4fbad03?w=400&q=60&auto=format&fit=crop' } },
-  { id: 'projector', label: 'Projector', image: { uri: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&q=60&auto=format&fit=crop' } },
+  { id: 'mic', label: 'Microphone System', image: { uri: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=400&q=60&auto=format&fit=crop' }, icon: 'checkbox-outline', paid: false },
+  { id: 'sound', label: '200 watt Premium Sound Systems', image: { uri: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=60&auto=format&fit=crop' }, icon: 'checkbox-outline', paid: false },
+  { id: 'ac', label: 'Air Conditioning With Cooler', image: { uri: 'https://plus.unsplash.com/premium_photo-1661315526732-271aa84f480d?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: false },
+  { id: 'seating', label: '150 Seating Capacity', image: { uri: 'https://images.unsplash.com/photo-1588459998451-4d243a241f55?q=80&w=1421&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: false },
+  { id: 'bar', label: 'Bar Counter-Full Food & Beverage.', image: { uri: 'https://images.unsplash.com/photo-1510626176961-4b57d4fbad03?w=400&q=60&auto=format&fit=crop' }, icon: 'checkbox-outline', paid: true, pricing_type: 'hour', addon_trigger: 'snack' },
+  { id: 'projector', label: 'HD Projector & Screen', image: { uri: 'https://images.unsplash.com/photo-1701318134632-7cda18e7c487?q=80&w=435&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: false },
+  { id: 'stage', label: 'Professional Stage', image: { uri: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&q=60&auto=format&fit=crop' }, icon: 'checkbox-outline', paid: false },
+  { id: 'lighting', label: 'Professional Lighting', image: { uri: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=400&q=60&auto=format&fit=crop' }, icon: 'checkbox-outline', paid: false },
+  { id: 'parking', label: 'Ample Parking', image: { uri: 'https://images.unsplash.com/photo-1506883968894-6e7738ccfc05?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: false },
+  { id: 'feature-1763352637725', label: 'Photo point', image: { uri: 'https://plus.unsplash.com/premium_photo-1658506703722-8f37d559adc7?q=80&w=861&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: true, pricing_type: 'item', item_price: 170.0, details: "What's Included\n- A4-Sized Aluminium Frame\n- Premium Photo Print" },
+  { id: 'feature-1763352714092', label: 'Dining hall seating & tables', image: { uri: 'https://images.unsplash.com/photo-1747535797922-0e36c1b4e795?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: false },
+  { id: 'feature-1763352734749', label: 'Podium with mic', image: { uri: 'https://images.unsplash.com/photo-1587691602199-fab9823b93af?q=80&w=435&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: false },
+  { id: 'feature-1763352786669', label: 'Bubble Maker With Light & Music', image: { uri: 'https://images.unsplash.com/photo-1618085238478-b0d7a59884a7?q=80&w=874&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: true, pricing_type: 'item', item_price: 100.0, details: 'Pricing varies according to the number of shots.\nPlease select the desired shot count using the checkbox after clicking the option.' },
+  { id: 'feature-1763352830310', label: 'Library With Book Collections', image: { uri: 'https://plus.unsplash.com/premium_photo-1663047671914-1b0a9ed1f4?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: false },
+  { id: 'feature-1763352879774', label: 'Carrom Board Game Table', image: { uri: 'https://media.istockphoto.com/id/1398245714/photo/smiling-saudi-couples-playing-carrom-at-home.jpg?s=1024x1024&w=is&k=20&c=BrKsHiKRhUBTooE5hPId0NEqkCuP6hjIVgQW5wlpChw=' }, icon: 'checkbox-outline', paid: true, pricing_type: 'hour', base_price: 100.0, details: 'Classic indoor game table, perfect for events and family entertainment.\nPrice calculated per hour' },
+  { id: 'feature-1763352943630', label: 'RGB Lights & Paper Blaster', image: { uri: 'https://images.unsplash.com/photo-1640893719203-4aa0a3373b07?q=80&w=1018&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: true, pricing_type: 'item', item_price: 70.0, details: 'Transform your celebrations with dynamic RGB lighting effects paired with an exciting paper blaster experience. The RGB lights add vibrant color patterns that elevate the mood, while the paper blaster showers the stage or dance floor with festive paper bursts - perfect for grand entries, special moments, and high-energy performances.\n\nPricing varies according to the number of shots.\nPlease select the desired shot count using the checkbox after clicking the option.' },
+  { id: 'feature-1763352980862', label: 'Smoker Machine with 13 Colour & 8 Led Lights', image: { uri: 'https://images.unsplash.com/photo-1594078819060-24feceff00f7?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: true, pricing_type: 'item', item_price: 200.0, details: 'Create a dramatic atmosphere with our advanced smoker machine featuring 13 vibrant colour options and 8 powerful LED lights. It adds depth, glow, and visual magic to the stage, making every entry, performance, and highlight moment look cinematic and unforgettable.\n\nPricing varies according to the number of shots.\nPlease select the desired shot count using the checkbox after clicking the option.' },
+  { id: 'feature-1763353032734', label: 'Fire Safety Cylinders (DCP/CO2)', image: { uri: 'https://images.unsplash.com/photo-1668889570338-4f20225eb9d3?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: false },
+  { id: 'feature-1763353110287', label: 'Games - Chess, Ludo, Snakes & Ladders, UNO Puzzles', image: { uri: 'https://plus.unsplash.com/premium_photo-1759763252768-d6e8282f201d?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: true, pricing_type: 'hour', base_price: 100.0, details: 'Pricing varies according to the number of hours.\nPlease select the desired number of hours using the checkbox after clicking the option.' },
+  { id: 'feature-1763353132349', label: 'Singers - With & Without Instruments', image: { uri: 'https://images.unsplash.com/photo-1565145368739-29e5a81be478?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: true, pricing_type: 'hour', addon_trigger: 'team' },
+  { id: 'feature-1763353161964', label: 'Dancers With All Types', image: { uri: 'https://images.unsplash.com/photo-1760542939973-50000a5d173d?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }, icon: 'checkbox-outline', paid: true, pricing_type: 'hour', addon_trigger: 'team' },
+  { id: 'feature-1763353187438', label: 'MC & Anchor (Host)', image: { uri: 'https://media.istockphoto.com/id/2151925618/photo/group-business-meeting.jpg?s=1024x1024&w=is&k=20&c=awDgtrWmCH4Y0-z86rqOiaV6jzpo1rV0PPxRbNUGbdU=' }, icon: 'checkbox-outline', paid: true, pricing_type: 'hour', addon_trigger: 'team' },
+  { id: 'feature-1763353215430', label: 'Photographer, Videographer & Reels Creator', image: { uri: 'https://images.unsplash.com/photo-1711473726143-b26145e55772?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzAyfHxwaG90b2dyYXBoZXJ8ZW58MHx8MHx8fDA%3D' }, icon: 'checkbox-outline', paid: true, pricing_type: 'hour', base_price: 1.0, addon_trigger: 'team' },
 ];
 
 const DEFAULT_EVENT_TYPES: EventType[] = [
@@ -625,28 +641,31 @@ export default function GrantHallPage() {
   const hallFeatures: HallFeature[] = useMemo(() => {
     if (!spaceData?.features) return DEFAULT_HALL_FEATURES;
     
+    // Helper to map feature object to HallFeature type
+    const mapFeature = (f: any): HallFeature => ({
+      id: f.id || f.label?.toLowerCase().replace(/\s+/g, '-'),
+      label: f.label,
+      image: typeof f.image === 'string' ? { uri: f.image } : f.image,
+      icon: f.icon,
+      paid: f.paid || false,
+      pricing_type: f.pricing_type,
+      base_price: f.base_price,
+      additional_hour_price: f.additional_hour_price,
+      item_price: f.item_price,
+      details: f.details,
+      addon_trigger: f.addon_trigger,
+    });
+    
     // Handle dict format with hall_features key
     if (typeof spaceData.features === 'object' && !Array.isArray(spaceData.features)) {
       if (Array.isArray(spaceData.features.hall_features)) {
-        return spaceData.features.hall_features.map((f: any) => ({
-          id: f.id || f.label?.toLowerCase().replace(/\s+/g, '-'),
-          label: f.label,
-          image: typeof f.image === 'string' ? { uri: f.image } : f.image,
-          paid: f.paid || false,
-          price: f.price || 0,
-        }));
+        return spaceData.features.hall_features.map(mapFeature);
       }
     }
     
     // Handle array format directly
     if (Array.isArray(spaceData.features)) {
-      return spaceData.features.map((f: any) => ({
-        id: f.id || f.label?.toLowerCase().replace(/\s+/g, '-'),
-        label: f.label,
-        image: typeof f.image === 'string' ? { uri: f.image } : f.image,
-        paid: f.paid || false,
-        price: f.price || 0,
-      }));
+      return spaceData.features.map(mapFeature);
     }
     
     return DEFAULT_HALL_FEATURES;

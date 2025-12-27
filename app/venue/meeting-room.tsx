@@ -12,7 +12,19 @@ import { useRouter } from 'expo-router';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Animated, Easing, Modal, ScrollView, StyleSheet, TextInput, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 
-type HallFeature = { id: string; icon?: string; label: string; image?: number | { uri: string }; paid?: boolean };
+type HallFeature = { 
+  id?: string; 
+  icon?: string; 
+  label: string; 
+  image?: number | string | { uri: string }; 
+  paid?: boolean;
+  pricing_type?: 'hour' | 'item';
+  base_price?: number;
+  additional_hour_price?: number;
+  item_price?: number;
+  details?: string;
+  addon_trigger?: 'cake' | 'snack' | 'team' | null;
+};
 
 // API Types
 type SpaceData = {
@@ -275,28 +287,31 @@ export default function MeetingRoomPage() {
   const hallFeatures: HallFeature[] = useMemo(() => {
     if (!spaceData?.features) return DEFAULT_HALL_FEATURES;
     
+    // Helper to map feature object to HallFeature type
+    const mapFeature = (f: any): HallFeature => ({
+      id: f.id || f.label?.toLowerCase().replace(/\s+/g, '-'),
+      label: f.label,
+      image: typeof f.image === 'string' ? { uri: f.image } : f.image,
+      icon: f.icon,
+      paid: f.paid || false,
+      pricing_type: f.pricing_type,
+      base_price: f.base_price,
+      additional_hour_price: f.additional_hour_price,
+      item_price: f.item_price,
+      details: f.details,
+      addon_trigger: f.addon_trigger,
+    });
+    
     // Handle dict format with hall_features key
     if (typeof spaceData.features === 'object' && !Array.isArray(spaceData.features)) {
       if (Array.isArray(spaceData.features.hall_features)) {
-        return spaceData.features.hall_features.map((f: any) => ({
-          id: f.id || f.label?.toLowerCase().replace(/\s+/g, '-'),
-          label: f.label,
-          image: typeof f.image === 'string' ? { uri: f.image } : f.image,
-          paid: f.paid || false,
-          price: f.price || 0,
-        }));
+        return spaceData.features.hall_features.map(mapFeature);
       }
     }
     
     // Handle array format directly
     if (Array.isArray(spaceData.features)) {
-      return spaceData.features.map((f: any) => ({
-        id: f.id || f.label?.toLowerCase().replace(/\s+/g, '-'),
-        label: f.label,
-        image: typeof f.image === 'string' ? { uri: f.image } : f.image,
-        paid: f.paid || false,
-        price: f.price || 0,
-      }));
+      return spaceData.features.map(mapFeature);
     }
     
     return DEFAULT_HALL_FEATURES;
