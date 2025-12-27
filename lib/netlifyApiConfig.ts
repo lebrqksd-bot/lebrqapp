@@ -38,7 +38,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  * This should be an HTTPS URL to your FastAPI backend
  * Example: https://lebrq-api-abc123.run.app/api
  */
-const DEFAULT_PRODUCTION_API_URL = 'https://your-api-domain.run.app/api';
+const DEFAULT_PRODUCTION_API_URL = 'https://fastapi-api-645233144944.asia-south1.run.app/api';
 
 /**
  * Development/local API URL (used for local Expo testing)

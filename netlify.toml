@@ -114,7 +114,7 @@
   command = "npm run export:web"
   publish = "dist"
   [context.production.environment]
-    EXPO_PUBLIC_API_URL = "https://your-api-domain.run.app/api"
+    EXPO_PUBLIC_API_URL = "https://fastapi-api-645233144944.asia-south1.run.app/api"
     NODE_ENV = "production"
 
 # Preview context (pull requests and branch deploys)
@@ -123,7 +123,7 @@
   publish = "dist"
   [context.deploy-preview.environment]
     # Use same production API for all preview deploys
-    EXPO_PUBLIC_API_URL = "https://your-api-domain.run.app/api"
+    EXPO_PUBLIC_API_URL = "https://fastapi-api-645233144944.asia-south1.run.app/api"
     NODE_ENV = "production"
 
 # Branch context (branch-specific configs, if needed)
